@@ -1,42 +1,35 @@
 lexer grammar NossaLexer;
 
-PALAVRA_CHAVE:
-    'DECLARACOES' | 'ALGORITMO' | 'INT' | 'REAL' | 'ATRIBUIR' | 'A' | 'LER' | 'IMPRIMIR' | 'SE' | 'ENTAO' | 'ENQUANTO' | 'INICIO' | 'FIM' | 'E' | 'OU';
+ALGORITMO: 'algoritmo';
 
-fragment
-DIGITO: '0'..'9';
+DECLARE: 'declare';
 
-NUMINT:
-    ('+'|'-')? DIGITO+;
+LITERAL: 'literal';
 
-NUMREAL:
-    ('+'|'-')? DIGITO+ '.' DIGITO+;
+ESCREVA: 'escreva';
 
-VARIAVEL:
-    [a-zA-Z][a-zA-Z0-0]*;
+INTEIRO: 'inteiro';
 
-CADEIA:
-    '\'' (ESC_SEQ | ~('\n'|'\''|'\\'))* '\'';
+LEIA: 'leia';
+
+FIM_ALGORITMO: 'fim_algoritmo';
+
+COLON: ':';
+
+LPAREN: '(';
+
+RPAREN: ')';
+
+COMMA: ',';
+
+IDENT: [a-zA-Z_][a-zA-Z_0-9]*;
 
 fragment
 ESC_SEQ:
     '\\\'';
 
-COMENTARIO:
-    '%' ~('\n'|'\r')* '\r'? '\n' { skip(); };
+CADEIA: '"' (ESC_SEQ | ~('\n'|'\''|'\\'))* '"' | '\'' (ESC_SEQ | ~('\n'|'\''|'\\'))* '\'';
 
-WS: (' '|'\t'|'\r'|'\n') { skip(); };
+COMENTARIO: '{' .*? '}' -> skip;
 
-OP_REL	:	'>' | '>=' | '<' | '<=' | '<>' | '='
-	;
-OP_ARIT	:	'+' | '-' | '*' | '/'
-	;
-DELIM	:	':'
-	;
-ABREPAR :	'('
-	;
-FECHAPAR:	')'
-	;
-
-CADEIA_NAO_FECHADA: '\'' (ESC_SEQ | ~('\n'|'\''|'\\'))* '\n';
-ERRO: .;
+WS: [ \t\r\n]+ -> skip;

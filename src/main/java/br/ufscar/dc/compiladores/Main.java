@@ -1,11 +1,10 @@
 package br.ufscar.dc.compiladores;
 
+import br.ufscar.dc.compiladores.NossaLexer;
+
 import java.io.IOException;
 
-import br.ufscar.dc.compiladores.NossaLexer;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
-import br.ufscar.dc.compiladores.NossaLexer;
 
 public class Main {
     public static void main(String args[]) throws Exception {
@@ -25,7 +24,7 @@ public class Main {
                         System.out.println("Cadeia não fechada na linha "+t.getLine());
                         break;
                     } else {
-                System.out.println("<" + nomeToken + "," + t.getText() + ">");
+                System.out.println("<'" + t.getText() + "'," + nomeToken + ">");
                             }
             }
         } catch (IOException e) {
