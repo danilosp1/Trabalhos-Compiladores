@@ -2,6 +2,7 @@ package br.ufscar.dc.compiladores;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import br.ufscar.dc.compiladores.NossaLexer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
