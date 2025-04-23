@@ -1,18 +1,15 @@
-{ cálculo do consumo médio de um veículo, dados a quilometragem total percorrida e o número de litros utilizados nos dois únicos abastecimentos realizados }
+{ dadas duas variáveis, uma inteira e outra literal, escrever os endereços de memória na qual estão armazenadas }
 
 algoritmo
-	declare
-		quilometragem, consumo,
-		abastecimento1, abastecimento2: real
+	declare valorReal: real 
+	declare valorLiteral: literal 
+	declare enderecoReal: ^real { endereços de variáveis reais }
+	declare enderecoLiteral: ^literal { endereços de variáveis literais }
 
-	{ obtenção da quilometragem e litros consumidos }
-	leia(quilometragem)
-	leia(abastecimento1, abastecimento2)
-
-	{ cálculo do consumo }
-	consumo <- quilometragem/(abastecimento1 + abastecimento2)
-
-	{ saída do resultado calculado }
-	escreva(consumo, " km/l")
-
+	{ armazenamento dos endereços }
+	enderecoReal <- &valorReal
+	enderecoLiteral <- &valorLiteral
+	{ escrita do resultado }
+	escreva("A variavel real esta no endereco:", enderecoReal)
+	escreva("A variavel literal esta no endereco:", enderecoLiteral)
 fim_algoritmo
