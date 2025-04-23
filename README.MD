@@ -123,3 +123,10 @@ Observação: Se estiver encontrando erros na execução após alterar o arquivo
 ```
 mvn clean
 ```
+
+
+## Execução dos testes:
+
+```
+java -jar compiladores-corretor-automatico-1.0-SNAPSHOT-jar-with-dependencies.jar 'java -jar NossaLexica/target/NossaLexica-1.0-SNAPSHOT.jar' gcc ./temp casos-de-teste "811537, 813583, 812124" t1
+```
