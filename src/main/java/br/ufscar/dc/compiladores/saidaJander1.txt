@@ -19,6 +19,10 @@
 <'(','('>
 <'nome',IDENT>
 <',',','>
-<'" tem ", idade, " anos."',CADEIA>
+<'" tem "',CADEIA>
+<',',','>
+<'idade',IDENT>
+<',',','>
+<'" anos."',CADEIA>
 <')',')'>
 <'fim_algoritmo','fim_algoritmo'>

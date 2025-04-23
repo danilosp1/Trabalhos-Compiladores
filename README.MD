@@ -44,7 +44,7 @@ Após clonar o repositório:
 ```
 git clone https://github.com/danilosp1/Compiladores-T1.git
 ```
-Deve-se utilizar o comando abaixo, obtendo um "BUILD SUCCES", semelhante ao listado.
+Deve-se entrar para dentro dele e utilizar o comando abaixo, obtendo um "BUILD SUCCES", semelhante ao listado.
 Além disso, esse comando também deve gerar o arquivo "NossaLexica-1.0-SNAPSHOT.jar" na pasta "target".
 ```
 mvn clean package
@@ -116,5 +116,10 @@ pedroubuntu@Aspire-A514-54:~/Desktop/teste_compila/Compiladores-T1$ mvn clean pa
 
 Após isso, podemos executar a aplicação com o seguinte comando:
 ```
-pedroubuntu@Aspire-A514-54:~/Desktop/teste_compila/Compiladores-T1$ java -jar target/NossaLexica-1.0-SNAPSHOT.jar src/main/java/br/ufscar/dc/compiladores/entradaJander1.txt src/main/java/br/ufscar/dc/compiladores/saidaJander1.txt
+java -jar target/NossaLexica-1.0-SNAPSHOT.jar src/main/java/br/ufscar/dc/compiladores/entradaJander1.txt src/main/java/br/ufscar/dc/compiladores/saidaJander1.txt
+```
+
+Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaLexer.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:
+```
+mvn clean
 ```

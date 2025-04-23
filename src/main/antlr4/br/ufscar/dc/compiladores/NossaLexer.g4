@@ -25,10 +25,10 @@ COMMA: ',';
 IDENT: [a-zA-Z_][a-zA-Z_0-9]*;
 
 fragment
-ESC_SEQ:
-    '\\\'';
+ESC_SEQ: 
+    '\\' [btnfr"'\\];    // aceita escapes de \n, \t, \\, \' e \"
 
-CADEIA: '"' (ESC_SEQ | ~('\n'|'\''|'\\'))* '"' | '\'' (ESC_SEQ | ~('\n'|'\''|'\\'))* '\'';
+CADEIA: '"' (ESC_SEQ | ~[\n"\\] )* '"'  | '\'' (ESC_SEQ | ~[\n'\\] )* '\'';
 
 COMENTARIO: '{' .*? '}' -> skip;
 

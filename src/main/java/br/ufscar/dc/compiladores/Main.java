@@ -25,7 +25,7 @@ public class Main {
 
         try (BufferedWriter escritor = new BufferedWriter(new FileWriter(arquivoSaida))) {
 
-            CharStream cs = CharStreams.fromFileName(args[0]);
+            CharStream cs = CharStreams.fromFileName(arquivoEntrada);
             NossaLexer lex = new NossaLexer(cs);
 
             Token t = null;
