@@ -1,28 +1,23 @@
 <'algoritmo','algoritmo'>
 <'declare','declare'>
-<'nome',IDENT>
+<'quilometragem',IDENT>
+<',',','>
+<'consumo',IDENT>
+<',',','>
+<'abastecimento1',IDENT>
+<',',','>
+<'abastecimento2',IDENT>
 <':',':'>
-<'literal','literal'>
-<'declare','declare'>
-<'idade',IDENT>
-<':',':'>
-<'inteiro','inteiro'>
+<'real','real'>
 <'leia','leia'>
 <'(','('>
-<'nome',IDENT>
+<'quilometragem',IDENT>
 <')',')'>
 <'leia','leia'>
 <'(','('>
-<'idade',IDENT>
+<'abastecimento1',IDENT>
+<',',','>
+<'abastecimento2',IDENT>
 <')',')'>
-<'escreva','escreva'>
-<'(','('>
-<'nome',IDENT>
-<',',','>
-<'" tem "',CADEIA>
-<',',','>
-<'idade',IDENT>
-<',',','>
-<'" anos."',CADEIA>
-<')',')'>
-<'fim_algoritmo','fim_algoritmo'>
+<'consumo',IDENT>
+Linha 13: < - simbolo nao identificado

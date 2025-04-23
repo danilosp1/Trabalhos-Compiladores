@@ -33,26 +33,33 @@ public class Main {
                 // String nomeToken = NossaLexer.VOCABULARY.getDisplayName(t.getType());
                 Vocabulary vocab = lex.getVocabulary();
                 String nomeToken = vocab.getDisplayName(t.getType());
-
-                if (nomeToken.equals("ERRO")) {
-                    String mensagem = "Erro na linha " + t.getLine() + ": " + t.getText();
-                    System.out.println(mensagem);
-                    escritor.write(mensagem);
-                    escritor.newLine();
-                    break;
-                } else if (nomeToken.equals("CADEIA_NAO_FECHADA")) {
-                    String mensagem = "Cadeia não fechada na linha " + t.getLine();
-                    System.out.println(mensagem);
-                    escritor.write(mensagem);
-                    escritor.newLine();
-                    break;
-                } else {
-                    String mensagem = "<'" + t.getText() + "'," + nomeToken + ">";
-                    System.out.println(mensagem);
-                    escritor.write(mensagem);
-                    escritor.newLine();
+                
+                String mensagem;
+                switch (nomeToken) {
+                    case "ERRO":
+                        // símbolo não reconhecido
+                        mensagem = "Linha " + t.getLine() + ": " + t.getText() + " - simbolo nao identificado";
+                        break;
+                    case "CADEIA_NAO_FECHADA":
+                        mensagem = "Linha " + t.getLine() + ": cadeia nao fechada";
+                        break;
+                    case "COMENTARIO_NAO_FECHADO":
+                        mensagem = "Linha " + t.getLine() + ": comentario nao fechado";
+                        break;
+                    default:
+                        // saída normal de token
+                        mensagem = "<'" + t.getText() + "'," + nomeToken + ">";
+                        escritor.write(mensagem);
+                        escritor.newLine();
+                        System.out.println(mensagem);
+                        continue;  // volta ao while
                 }
-            }
+                // se chegou aqui, é algum erro: imprime e interrompe
+                System.out.println(mensagem);
+                escritor.write(mensagem);
+                escritor.newLine();
+                break;
+            }            
         } catch (IOException e) {
             e.printStackTrace();
         }

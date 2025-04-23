@@ -1,35 +1,61 @@
 lexer grammar NossaLexer;
 
-ALGORITMO: 'algoritmo';
+// ——— Palavras-chave e símbolos ———
+ALGORITMO       : 'algoritmo';
+DECLARE         : 'declare';
+LITERAL         : 'literal';
+ESCREVA         : 'escreva';
+INTEIRO         : 'inteiro';
+REAL            : 'real';
+LEIA            : 'leia';
+FIM_ALGORITMO   : 'fim_algoritmo';
 
-DECLARE: 'declare';
+// ATRIBUICAO      : '<-';
+COLON           : ':';
+LPAREN          : '(';
+RPAREN          : ')';
+COMMA           : ',';
 
-LITERAL: 'literal';
+MAIS            : '+';
+MENOS           : '-';
+MULT            : '*';
+DIVISAO         : '/';
 
-ESCREVA: 'escreva';
+// identificadores
+IDENT           : [a-zA-Z_][a-zA-Z_0-9]*;
 
-INTEIRO: 'inteiro';
 
-LEIA: 'leia';
+// ——— sequências de escape para strings ———
+fragment ESC_SEQ: '\\' [btnfr"'\\];    // \b, \t, \n, \f, \r, \', \" e \\
 
-FIM_ALGORITMO: 'fim_algoritmo';
 
-COLON: ':';
+// ——— CADEIA de caracteres (string) ———
+// cadeia correta (fecha na mesma linha)
+CADEIA
+    : '"' ( ESC_SEQ | ~[\\"\r\n] )* '"'
+    | '\'' ( ESC_SEQ | ~[\\'\r\n] )* '\''
+    ;
 
-LPAREN: '(';
 
-RPAREN: ')';
+// cadeia que não fecha na mesma linha
+CADEIA_NAO_FECHADA
+    : '"' (~[\\"\r\n])*            // abre " e não encontra " antes do EOL
+    | '\'' (~[\\'\r\n])*           // abre ' e não encontra ' antes do EOL
+    ;
 
-COMMA: ',';
 
-IDENT: [a-zA-Z_][a-zA-Z_0-9]*;
+// ——— COMENTÁRIO ———
+// comentário correto (skip)
+COMENTARIO: '{' ~[\r\n}]* '}' -> skip;
 
-fragment
-ESC_SEQ: 
-    '\\' [btnfr"'\\];    // aceita escapes de \n, \t, \\, \' e \"
 
-CADEIA: '"' (ESC_SEQ | ~[\n"\\] )* '"'  | '\'' (ESC_SEQ | ~[\n'\\] )* '\'';
+// comentário não fechado na mesma linha
+COMENTARIO_NAO_FECHADO: '{' ~[\r\n}]*;               // abre { e não fecha antes do EOL
 
-COMENTARIO: '{' .*? '}' -> skip;
 
+// ——— WS ———
 WS: [ \t\r\n]+ -> skip;
+
+
+// ——— ERRO — captura qualquer outro caractere inválido ———
+ERRO: .;
