@@ -33,7 +33,7 @@ public class Main {
                 // String nomeToken = NossaLexer.VOCABULARY.getDisplayName(t.getType());
                 Vocabulary vocab = lex.getVocabulary();
                 String nomeToken = vocab.getDisplayName(t.getType());
-                
+
                 String mensagem;
                 switch (nomeToken) {
                     case "ERRO":
@@ -41,7 +41,7 @@ public class Main {
                         mensagem = "Linha " + t.getLine() + ": " + t.getText() + " - simbolo nao identificado";
                         break;
                     case "CADEIA_NAO_FECHADA":
-                        mensagem = "Linha " + t.getLine() + ": cadeia nao fechada";
+                        mensagem = "Linha " + t.getLine() + ": cadeia literal nao fechada";
                         break;
                     case "COMENTARIO_NAO_FECHADO":
                         mensagem = "Linha " + t.getLine() + ": comentario nao fechado";
