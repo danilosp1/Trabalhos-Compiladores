@@ -1,15 +1,16 @@
-{ dadas duas variáveis, uma inteira e outra literal, escrever os endereços de memória na qual estão armazenadas }
+{ leitura de nome e idade com escrita de mensagem usando estes dados }
 
 algoritmo
-	declare valorReal: real 
-	declare valorLiteral: literal 
-	declare enderecoReal: ^real { endereços de variáveis reais }
-	declare enderecoLiteral: ^literal { endereços de variáveis literais }
+	declare
+		nome~ literal
+	declare
+		idade: inteiro
 
-	{ armazenamento dos endereços }
-	enderecoReal <- &valorReal
-	enderecoLiteral <- &valorLiteral
-	{ escrita do resultado }
-	escreva("A variavel real esta no endereco:", enderecoReal)
-	escreva("A variavel literal esta no endereco:", enderecoLiteral)
+	{ leitura de nome e idade do teclado }
+	leia(nome)
+	leia(idade)
+
+	{ saída da mensagem na tela }
+	escreva(nome, " tem ", idade, " anos.")
+
 fim_algoritmo

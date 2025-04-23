@@ -23,22 +23,39 @@ FACA            : 'faca';
 FIM_PARA        : 'fim_para';
 ENQUANTO        : 'enquanto';
 FIM_ENQUANTO    : 'fim_enquanto';
+REGISTRO        : 'registro';
+FIM_REGISTRO    : 'fim_registro';
+TIPO            : 'tipo';
+PROCEDIMENTO    : 'procedimento';
+FIM_PROCEDIMENTO: 'fim_procedimento';
+FUNCAO          : 'funcao';
+RETORNE         : 'retorne';
+FIM_FUNCAO      : 'fim_funcao';
 
 // Tipos primitivos
 INTEIRO         : 'inteiro';
 REAL            : 'real';
 LOGICO          : 'logico';
+VAR             : 'var';
+CONSTANTE       : 'constante';
+
+FALSO           : 'falso';
+VERDADEIRO      : 'verdadeiro';
 
 ATRIBUICAO      : '<-';
 
-CHAPEUZINHO     : '^';
-E_COMERCIAL     : '&';
+PONTEIRO        : '^';
+ENDERECO        : '&';
+
+PONTO           : '.';
 
 // Símbolos e Operadores
 COLON           : ':';
 LPAREN          : '(';
 RPAREN          : ')';
 COMMA           : ',';
+LCOLCHETE       : '[';
+RCOLCHETE       : ']';
 
 MAIS            : '+';
 MENOS           : '-';
