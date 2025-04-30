@@ -42,7 +42,7 @@ OS name: "linux", version: "5.15.0-136-generic", arch: "amd64", family: "unix"
 
 Após clonar o repositório:
 ```
-git clone https://github.com/danilosp1/Compiladores-T1.git
+git clone https://github.com/danilosp1/Trabalhos-Compiladores.git
 ```
 Deve-se entrar para dentro dele e utilizar o comando abaixo, obtendo um "BUILD SUCCES", semelhante ao listado.
 Além disso, esse comando também deve gerar o arquivo "NossaLexica-1.0-SNAPSHOT.jar" na pasta "target".

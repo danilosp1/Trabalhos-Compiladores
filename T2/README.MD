@@ -42,7 +42,7 @@ OS name: "linux", version: "5.15.0-136-generic", arch: "amd64", family: "unix"
 
 Após clonar o repositório:
 ```
-git clone https://github.com/danilosp1/Compiladores-T1.git
+git clone https://github.com/danilosp1/Trabalhos-Compiladores.git
 ```
 Deve-se entrar para dentro dele e utilizar o comando abaixo, obtendo um "BUILD SUCCES", semelhante ao listado.
 Além disso, esse comando também deve gerar o arquivo "NossaLexica-1.0-SNAPSHOT.jar" na pasta "target".
@@ -129,4 +129,30 @@ mvn clean
 
 ```
 java -jar compiladores-corretor-automatico-1.0-SNAPSHOT-jar-with-dependencies.jar 'java -jar T2/target/NossaLexica-1.0-SNAPSHOT.jar' gcc ./temp casos-de-teste "811537, 813583, 812124" t2
+```
+
+#### Saída após execução dos testes:
+- T1 - Não passa em todos os testes pois, ao encontrar um erro, ele sequer chega a imprimir na saída os tokens, já que agora foi implementado o analisador sintático.
+```
+==================================
+Nota do grupo "811537, 813583, 812124":
+CT 1 = 7.837838 (29/37)
+CT 2 = 0.0 (0/62)
+CT 3 = 0.0 (0/9)
+CT 4 = 0.0 (0/9)
+CT 5 = 0.0 (0/20)
+==================================
+```
+
+- T2
+```
+==================================
+Nota do grupo "811537, 813583, 812124":
+CT 1 = 0.0 (0/37)
+CT 2 = 10.0 (62/62)
+CT 3 = 0.0 (0/9)
+CT 4 = 0.0 (0/9)
+CT 5 = 0.0 (0/20)
+==================================
+
 ```
