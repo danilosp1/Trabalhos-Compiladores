@@ -58,22 +58,22 @@ mvn clean package
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 [INFO] --- clean:3.2.0:clean (default-clean) @ NossaLexica ---
-[INFO] Deleting /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/target
+[INFO] Deleting /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/target
 [INFO] 
 [INFO] --- antlr4:4.13.2:antlr4 (antlr) @ NossaLexica ---
-[INFO] ANTLR 4: Processing source directory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/src/main/antlr4
+[INFO] ANTLR 4: Processing source directory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/src/main/antlr4
 [INFO] Processing grammar: br/ufscar/dc/compiladores/NossaGramatica.g4
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ NossaLexica ---
-[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/src/main/resources
 [INFO] 
 [INFO] --- compiler:3.13.0:compile (default-compile) @ NossaLexica ---
 [INFO] Recompiling the module because of changed source code.
-[INFO] Compiling 5 source files with javac [debug target 17] to target/classes
+[INFO] Compiling 10 source files with javac [debug target 17] to target/classes
 [WARNING] system modules path not set in conjunction with -source 17
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ NossaLexica ---
-[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/src/test/resources
+[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/src/test/resources
 [INFO] 
 [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ NossaLexica ---
 [INFO] No sources to compile
@@ -82,7 +82,7 @@ mvn clean package
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- jar:3.4.1:jar (default-jar) @ NossaLexica ---
-[INFO] Building jar: /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/target/NossaLexica-1.0-SNAPSHOT.jar
+[INFO] Building jar: /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/target/NossaLexica-1.0-SNAPSHOT.jar
 [INFO] 
 [INFO] --- shade:3.4.1:shade (default) @ NossaLexica ---
 [INFO] Including org.antlr:antlr4:jar:4.13.2 in the shaded jar.
@@ -101,12 +101,12 @@ mvn clean package
 [WARNING] mvn dependency:tree -Ddetail=true and the above output.
 [WARNING] See https://maven.apache.org/plugins/maven-shade-plugin/
 [INFO] Replacing original artifact with shaded artifact.
-[INFO] Replacing /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/target/NossaLexica-1.0-SNAPSHOT.jar with /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/T2/Compiladores-T2/target/NossaLexica-1.0-SNAPSHOT-shaded.jar
+[INFO] Replacing /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/target/NossaLexica-1.0-SNAPSHOT.jar with /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T3/target/NossaLexica-1.0-SNAPSHOT-shaded.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  3.635 s
-[INFO] Finished at: 2025-04-30T15:09:31-03:00
+[INFO] Total time:  3.866 s
+[INFO] Finished at: 2025-05-14T15:57:36-03:00
 [INFO] ------------------------------------------------------------------------
 ```
 
@@ -128,15 +128,15 @@ mvn clean
 ## Execução dos testes:
 
 ```
-java -jar compiladores-corretor-automatico-1.0-SNAPSHOT-jar-with-dependencies.jar 'java -jar T2/target/NossaLexica-1.0-SNAPSHOT.jar' gcc ./temp casos-de-teste "811537, 813583, 812124" t3
+java -jar compiladores-corretor-automatico-1.0-SNAPSHOT-jar-with-dependencies.jar 'java -jar Trabalho-Compiladores/T3/target/NossaLexica-1.0-SNAPSHOT.jar' gcc ./temp casos-de-teste "811537, 813583, 812124" t3
 ```
 
 #### Saída após execução dos testes:
-- T1 - Não passa em todos os testes pois, ao encontrar um erro, ele sequer chega a imprimir na saída os tokens, já que agora foi implementado o analisador sintático.
+- T1 - Não passa em todos os testes pois, ao encontrar um erro, ele sequer chega a imprimir na saída os tokens.
 ```
 ==================================
 Nota do grupo "811537, 813583, 812124":
-CT 1 = 7.837838 (29/37)
+CT 1 = 4.0540543 (15/37)
 CT 2 = 0.0 (0/62)
 CT 3 = 0.0 (0/9)
 CT 4 = 0.0 (0/9) 
@@ -150,7 +150,20 @@ CT 5 = 0.0 (0/20)
 Nota do grupo "811537, 813583, 812124":
 CT 1 = 0.0 (0/37)
 CT 2 = 10.0 (62/62)
-CT 3 = 0.0 (0/9) ATUALIZAR!!!
+CT 3 = 0.0 (0/9)
+CT 4 = 0.0 (0/9)
+CT 5 = 0.0 (0/20)
+==================================
+
+```
+
+- T3
+```
+==================================
+Nota do grupo "811537, 813583, 812124":
+CT 1 = 0.0 (0/37)
+CT 2 = 0.0 (62/62)
+CT 3 = 10.0 (9/9)
 CT 4 = 0.0 (0/9)
 CT 5 = 0.0 (0/20)
 ==================================
