@@ -214,6 +214,7 @@ public class GeradorDeCodigo extends NossaGramaticaBaseVisitor<String> {
                 else if (tipo == AnalisadorSemantico.TipoLA.REAL) formatString.append("%f");
                 else if (tipo == AnalisadorSemantico.TipoLA.LITERAL) formatString.append("%s");
                 else if (tipo == AnalisadorSemantico.TipoLA.LOGICO) formatString.append("%d");
+                else formatString.append("%s");
                 args.add(expStr);
             }
         }
