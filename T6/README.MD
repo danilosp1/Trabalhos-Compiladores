@@ -13,6 +13,9 @@ Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar 
 
 Para que isso seja possível, nosso compilador conta com um sistema de geração de código Python compatível com a biblioteca MoviePy que é capaz de executar de fato os comandos descritos na nossa linguagem simplificada.
 
+Documentação MoviePy: https://zulko.github.io/moviepy
+Repositório MoviePy: https://github.com/Zulko/moviepy
+
 ## Vídeo de Apresentação
 ....
 
@@ -105,7 +108,7 @@ video.write_videofile("video_ronaldinho.mp4", fps=24)
 O sistema também possui mecanismos de verificação de erros léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
 
 ```
-(exemplo de erros captados)
+(exemplo de erros captados, e detalhar melhor quais foram os 3/4 principais erros semanticos que são verificados)
 ```
 
 
