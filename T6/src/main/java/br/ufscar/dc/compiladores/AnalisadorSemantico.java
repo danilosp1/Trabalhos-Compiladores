@@ -25,6 +25,11 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     private final Map<String, String> tabelaSimbolos = new HashMap<>(); // id -> tipo
     private final List<ErroSemantico> erros = new ArrayList<>();
 
+    // Flags para garantir declarações únicas
+    private boolean duracaoCenaDefinida = false;
+    private boolean audioDefinido = false;
+    private boolean renderizacaoDefinida = false;
+
     public List<ErroSemantico> getErros() {
         return erros;
     }
@@ -61,6 +66,11 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
 
     @Override
     public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) {
+        if (audioDefinido) {
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "A trilha sonora já foi adicionada. Apenas um áudio principal é permitido."));
+        }
+        audioDefinido = true;
+
         String id = ctx.ID().getText();
         int volume = Integer.parseInt(ctx.INT().getText());
 
@@ -77,6 +87,15 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
                     "Volume deve estar entre 0 e 100."));
         }
 
+        return null;
+    }
+
+    @Override
+    public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) {
+        if (renderizacaoDefinida) {
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "A configuração de renderização já foi definida."));
+        }
+        renderizacaoDefinida = true;
         return null;
     }
 }

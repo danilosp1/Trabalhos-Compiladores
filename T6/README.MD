@@ -1,13 +1,115 @@
-# Trabalho 5 de Compiladores
+# Trabalho 6 de Compiladores
 Professor Daniel Lucrédio <br>
-11 de Junho de 2025
+1 de Julho de 2025
 
 Integrantes:
 - Danilo da Silva Pinto, 811537
 - Lucas de Araujo Cardoso, 813583
 - Pedro Vinícius Guandalini Vicente, 812124
 
-## Requisitos para o Adequado Funcionamento do Sistema:
+# Linguagem de Geração de Vídeos com Áudios e Imagens
+
+Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar vídeos customizáveis através da junção de Imagens, Áudios, Legendas e Efeitos de transição e edição.
+
+Para que isso seja possível, nosso compilador conta com um sistema de geração de código Python compatível com a biblioteca MoviePy que é capaz de executar de fato os comandos descritos na nossa linguagem simplificada.
+
+## Vídeo de Apresentação
+....
+
+## Exemplos de Código
+A nossa linguagem simplificada e com recursos no idioma português possui o seguinte funcionamento conforme o exemplo apresentado:
+
+Nossa Linguagem (exemplos/entrada.txt)
+```
+carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.png"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.png"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+
+cena {
+    duracao: 21s
+
+    criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
+        fonte: "Arial Bold"
+        tamanho_fonte: 72
+        cor: 'preto'
+        posicao: (centro, '80%') 
+        inicio em 0s por 5s
+    }
+
+    usar imagem ronaldinho1 {
+        posicao: (centro, centro)
+        inicio em 5s por 5s
+        efeito: 'fade_in' 1s, 'fade_out' 1s
+    }
+
+    usar imagem ronaldinho2 {
+        posicao: (centro, centro)
+        inicio em 10s por 5s
+        efeito: 'blur_in' 1s, 'blur_out' 1s
+    }
+
+    usar imagem ronaldinho3 {
+        posicao: (centro, centro)
+        inicio em 15s por 5s
+        efeito: 'zoom_in' 1s, 'zoom_out' 1s
+    }
+
+    adicionar audio trilha_animada com volume 80%
+}
+
+renderizar para "video_ronaldinho.mp4" com resolucao (1080, 1080)
+```
+
+Saída Obtida (exemplos/saidaEsperada.py)
+```
+from moviepy.editor import *
+from moviepy.video.fx.all import fadein, fadeout, blur
+
+ronaldinho1 = ImageClip("./assets/ronaldinho1.jpg")
+ronaldinho2 = ImageClip("./assets/ronaldinho2.png")
+ronaldinho3 = ImageClip("./assets/ronaldinho3.png")
+trilha_animada = AudioFileClip("./assets/musica_upbeat.mp3")
+
+texto0 = TextClip(
+    text="TOP 10 FOTOS DO BRUXO!!!!",
+    fontsize=72,
+    font="Arial-Bold",
+    color='black'
+).set_position(('centro', '80%')).set_duration(5).set_start(0)
+
+img1 = ronaldinho1.set_position(('centro', 'centro')).set_duration(5).set_start(5)
+img1 = fadein(img1, 1)
+img1 = fadeout(img1, 1)
+
+img2 = ronaldinho2.set_position(('centro', 'centro')).set_duration(5).set_start(10)
+img2 = blur(img2, duration=1)
+img2 = blur(img2, duration=1)
+
+img3 = ronaldinho3.set_position(('centro', 'centro')).set_duration(5).set_start(15)
+img3 = img3.resize(lambda t: 1 + 0.2 * t / 5)
+img3 = img3.resize(lambda t: 1.2 - 0.2 * t / 5)
+
+trilha_animada_final = trilha_animada.volumex(0,80)
+
+
+clips = [texto0, img1, img2, img3]
+video = CompositeVideoClip(clips, size=(1080, 1080)).set_duration(21)
+
+video = video.set_audio(trilha_animada_final)
+
+video.write_videofile("video_ronaldinho.mp4", fps=24)
+
+```
+
+O sistema também possui mecanismos de verificação de erros léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
+
+```
+(exemplo de erros captados)
+```
+
+
+## Requisitos para o Adequado Funcionamento do Sistema: (LEMBRAR DE TALVEZ ADICIONAR OS REQUISITOS DO PYTHON PARA EXECUTAR O VIDEO TAMBEM)
 
 Para o correto funcionamento do programa, é necessário o JDK versão 17, como pedido no arquivo pom.xml:
 ```
@@ -114,7 +216,7 @@ mvn clean package
 
 Após isso, podemos executar a aplicação com o seguinte comando:
 ```
-java -jar target/NossaLexica-1.0-SNAPSHOT.jar src/main/java/br/ufscar/dc/compiladores/entradaJander1.txt src/main/java/br/ufscar/dc/compiladores/saidaJander1.txt
+java -jar target/NossaLexica-1.0-SNAPSHOT.jar exemplos/entrada.txt exemplos/saida.py
 ```
 
 Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaGramatica.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:
@@ -122,70 +224,16 @@ Observação: Se estiver encontrando erros na execução após alterar o arquivo
 mvn clean
 ```
 
+## Geração do vídeo a partir do código gerado
+
+
 ## Execução dos testes:
 
 ```
-java -jar compiladores-corretor-automatico-1.0-SNAPSHOT-jar-with-dependencies.jar 'java -jar Trabalho-Compiladores/T5/target/NossaLexica-1.0-SNAPSHOT.jar' gcc ./temp casos-de-teste "811537, 813583, 812124" t5
+(talvez fazer script para rodar todos os exemplos de entrada e saida esperados como testes)
 ```
 
 #### Saída após execução dos testes:
-- T1 - Não passa nos testes pois, ao encontrar um erro, ele sequer chega a imprimir na saída os tokens.
 ```
-==================================
-Nota do grupo "811537, 813583, 812124":
-CT 1 = 0.0 (0/37)
-CT 2 = 0.0 (0/62)
-CT 3 = 0.0 (0/9)
-CT 4 = 0.0 (0/9)
-CT 5 = 0.0 (0/20)
-==================================
-```
-
-- T2
-```
-==================================
-Nota do grupo "811537, 813583, 812124":
-CT 1 = 0.0 (0/37)
-CT 2 = 10.0 (62/62)
-CT 3 = 0.0 (0/9)
-CT 4 = 0.0 (0/9)
-CT 5 = 0.0 (0/20)
-==================================
-
-```
-
-- T3
-```
-==================================
-Nota do grupo "811537, 813583, 812124":
-CT 1 = 0.0 (0/37)
-CT 2 = 0.0 (0/62)
-CT 3 = 10.0 (9/9)
-CT 4 = 0.0 (0/9)
-CT 5 = 0.0 (0/20)
-==================================
-
-```
-
-- T4
-```
-Nota do grupo "811537, 813583, 812124":
-CT 1 = 0.0 (0/37)
-CT 2 = 0.0 (0/62)
-CT 3 = 0.0 (0/9)
-CT 4 = 7.7777777 (7/9)
-CT 5 = 0.0 (0/20)
-
-```
-
-- T5
-```
-==================================
-Nota do grupo "811537, 813583, 812124":
-CT 1 = 0.0 (0/37)
-CT 2 = 0.0 (0/62)
-CT 3 = 0.0 (0/9)
-CT 4 = 0.0 (0/9)
-CT 5 = 9.5 (19/20)
-==================================
+(saidas obtidas com esses testes, mostrar que ele captou os erros lexicos/sintaticos/semanticos corretamente onde tinha e gerou o código python corretamente onde tinha) 
 ```
