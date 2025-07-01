@@ -234,6 +234,11 @@ Agora para gerar o vídeo a partir do código gerado pelo nosso compilador, prec
 
 (Baixar o Python3...)
 
+Criar as variáveis de ambiente para fazer instalações locais e não globais:
+```
+python3 -m venv venv
+```
+
 Ativar o ambiente virtual
 ```
 source venv/bin/activate
