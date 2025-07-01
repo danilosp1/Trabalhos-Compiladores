@@ -7,216 +7,201 @@ import java.util.*;
 public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
 
     private final StringBuilder imports = new StringBuilder();
-    private final StringBuilder recursos = new StringBuilder();
-    private final StringBuilder clipes = new StringBuilder();
-    private final StringBuilder audio = new StringBuilder();
-    private final StringBuilder composicao = new StringBuilder();
+    private final StringBuilder paths = new StringBuilder();
+    private final StringBuilder textClips = new StringBuilder();
+    private final StringBuilder imageClips = new StringBuilder();
+    private final StringBuilder audioProcessing = new StringBuilder();
+    private final StringBuilder composition = new StringBuilder();
 
-    private final List<String> nomesClipes = new ArrayList<>();
-    private String nomeAudioFinal = null;
-    private String resolucao = "size=(1080, 1080)";
-    private String arquivoSaida = "\"video_final.mp4\"";
-    private int duracaoTotal = -1;
-    private int contadorClipes = 0;
+    private final List<String> nomesTextosClipes = new ArrayList<>();
+    private final List<String> nomesImagensClipes = new ArrayList<>();
+
+    private int resolucaoW = 1080;
+    private int resolucaoH = 1920;
+    private int fps = 24;
+    private String arquivoSaida = "video_final.mp4";
+
+    // --- INÍCIO DAS MUDANÇAS ---
     
+    // Mapeamento para tradução de cores e posições
     private static final Map<String, String> CORES = new HashMap<>();
+    private static final Map<String, String> POSICOES = new HashMap<>();
+    
     static {
-        CORES.put("preto", "black");
         CORES.put("branco", "white");
+        CORES.put("preto", "black");
         CORES.put("vermelho", "red");
         CORES.put("verde", "green");
         CORES.put("azul", "blue");
+
+        POSICOES.put("centro", "center");
+        POSICOES.put("esquerda", "left");
+        POSICOES.put("direita", "right");
+        POSICOES.put("topo", "top");
+        POSICOES.put("baixo", "bottom");
     }
 
     public String getCodigoGerado() {
-        imports.append("from moviepy.editor import *\n")
-               .append("from moviepy.video.fx.all import fadein, fadeout, blur\n\n");
+        // CORRIGIDO: Import explícito dos módulos
+        imports.append("from moviepy import ImageClip, AudioFileClip, CompositeVideoClip, TextClip, vfx");
 
-        composicao.append("\n# === Cena completa ===\n");
-        composicao.append("clips = [").append(String.join(", ", nomesClipes)).append("]\n");
-        composicao.append("video = CompositeVideoClip(clips, ").append(resolucao).append(")");
-        if (duracaoTotal > 0) {
-            composicao.append(".set_duration(").append(duracaoTotal).append(")");
+        composition.append("video = CompositeVideoClip([")
+                   .append(String.join(", ", nomesImagensClipes))
+                   .append("], size=(").append(resolucaoW).append(", ").append(resolucaoH).append("))\n");
+        
+        if (!audioProcessing.toString().isEmpty()) {
+            composition.append(audioProcessing);
+            composition.append("video = video.with_audio(audio)\n");
         }
-        composicao.append("\n\n");
-
-        composicao.append("# === Adiciona áudio ===\n");
-        if (nomeAudioFinal != null) {
-            composicao.append("video = video.set_audio(").append(nomeAudioFinal).append(")\n\n");
-        }
-
-        composicao.append("# === Exporta vídeo ===\n");
-        composicao.append("video.write_videofile(").append(arquivoSaida).append(", fps=24)\n");
-
-        return imports.toString() +
-               "# === Recursos carregados ===\n" + recursos.toString() + "\n" +
-               clipes.toString() +
-               audio.toString() +
-               composicao.toString();
-    }
-
-    @Override
-    public Void visitDeclaracao(VideoLangParser.DeclaracaoContext ctx) {
-        String tipo = ctx.getChild(1).getText();
-        String id = ctx.ID().getText();
-        String caminho = "\"" + unquote(ctx.STRING().getText()) + "\"";
-
-        if (tipo.equals("imagem")) {
-            recursos.append(String.format("%s = ImageClip(%s)\n", id, caminho));
+        
+        if (!nomesTextosClipes.isEmpty()) {
+            composition.append("\nfinal_video = CompositeVideoClip([video, ")
+                       .append(String.join(", ", nomesTextosClipes))
+                       .append("], size=(").append(resolucaoW).append(", ").append(resolucaoH).append("))\n");
         } else {
-            recursos.append(String.format("%s = AudioFileClip(%s)\n", id, caminho));
+            composition.append("final_video = video\n");
         }
+        
+        composition.append(String.format("\nfinal_video.write_videofile(\"%s\", fps=%d)\n", arquivoSaida, fps));
+
+        return imports.toString() + "\n\n" +
+               paths.toString() + "\n" +
+               textClips.toString() +
+               imageClips.toString() + "\n" +
+               composition.toString();
+    }
+    
+    @Override
+    public Void visitProgram(VideoLangParser.ProgramContext ctx) {
+        // O import agora é gerado no final, no método getCodigoGerado
+        visitChildren(ctx);
         return null;
     }
 
     @Override
-    public Void visitDuracaoCena(VideoLangParser.DuracaoCenaContext ctx) {
-        duracaoTotal = Integer.parseInt(ctx.INT().getText());
+    public Void visitDeclaracao(VideoLangParser.DeclaracaoContext ctx) {
+        String id = ctx.ID().getText();
+        String caminho = unquote(ctx.STRING().getText());
+        paths.append(String.format("%s_path = \"%s\"\n", id, caminho));
         return null;
     }
 
     @Override
     public Void visitCriarTexto(VideoLangParser.CriarTextoContext ctx) {
-        String nomeVar = "texto" + contadorClipes++;
-        nomesClipes.add(nomeVar);
+        String nomeVar = "txt_clip" + nomesTextosClipes.size();
+        nomesTextosClipes.add(nomeVar);
         
-        clipes.append(String.format("# === Texto %d ===\n", contadorClipes));
-
-        String conteudo = "\"" + unquote(ctx.STRING().getText()) + "\"";
+        String conteudo = unquote(ctx.STRING().getText());
         String fonte = "Arial";
         int tamanho = 72;
-        String cor = "white";
-        String posicao = "('center', 'center')";
-        int inicio = 0, duracao = 5;
+        String corInput = "branco";
+        String posInput = "centro";
+        int inicio = 0, duracao = 3;
 
-        for (var atributo : ctx.textoAtributo()) {
-            if (atributo.getStart().getText().equals("fonte")) {
-                fonte = unquote(atributo.STRING().getText());
-            } else if (atributo.getStart().getText().equals("tamanho_fonte")) {
-                tamanho = Integer.parseInt(atributo.INT(0).getText());
-            } else if (atributo.getStart().getText().equals("cor")) {
-                String corInput = unquote(atributo.STRING().getText());
-                cor = CORES.getOrDefault(corInput.toLowerCase(), corInput);
-            } else if (atributo.getStart().getText().equals("posicao")) {
-                posicao = String.format("(%s, %s)",
-                    processarCoord(atributo.coord(0)),
-                    processarCoord(atributo.coord(1))
-                );
-            } else if (atributo.getStart().getText().equals("inicio")) {
-                inicio = Integer.parseInt(atributo.INT(0).getText());
-                duracao = Integer.parseInt(atributo.INT(1).getText());
+        for (var attr : ctx.textoAtributo()) {
+            String key = attr.getChild(0).getText();
+            if (key.equals("fonte")) fonte = unquote(attr.STRING().getText());
+            else if (key.equals("tamanho_fonte")) tamanho = Integer.parseInt(attr.INT(0).getText());
+            else if (key.equals("cor")) corInput = unquote(attr.STRING().getText());
+            else if (key.equals("posicao")) posInput = unquote(attr.STRING().getText());
+            else if (key.equals("inicio")) {
+                inicio = Integer.parseInt(attr.INT(0).getText());
+                duracao = Integer.parseInt(attr.INT(1).getText());
             }
         }
 
-        clipes.append(String.format("%s = TextClip(\n", nomeVar));
-        clipes.append(String.format("    text=%s,\n", conteudo));
-        clipes.append(String.format("    fontsize=%d,\n", tamanho));
-        clipes.append(String.format("    font=\"%s\",\n", fonte.replace(" ", "-")));
-        clipes.append(String.format("    color='%s'\n", cor));
-        clipes.append(String.format(").set_position(%s).set_duration(%d).set_start(%d)\n\n", posicao, duracao, inicio));
+        // CORRIGIDO: Tradução de cor e posição
+        String corFinal = CORES.getOrDefault(corInput.toLowerCase(), corInput);
+        String posFinal = POSICOES.getOrDefault(posInput.toLowerCase(), posInput);
 
+        textClips.append(String.format("%s = TextClip(\n", nomeVar));
+        textClips.append(String.format("    text=\"%s\",\n", conteudo));
+        textClips.append(String.format("    font=\"%s\",\n", fonte));
+        textClips.append(String.format("    font_size=%d,\n", tamanho));
+        textClips.append(String.format("    color='%s'\n", corFinal));
+        textClips.append(String.format(").with_start(%d).with_duration(%d).with_position('%s')\n\n", inicio, duracao, posFinal));
         return null;
     }
 
     @Override
     public Void visitUsarImagem(VideoLangParser.UsarImagemContext ctx) {
         String recursoId = ctx.ID().getText();
-        String nomeVar = "img" + contadorClipes++;
-        nomesClipes.add(nomeVar);
-
-        clipes.append(String.format("# === Imagem %d (%s) ===\n", contadorClipes, recursoId));
+        String nomeVar = "clip" + nomesImagensClipes.size();
+        nomesImagensClipes.add(nomeVar);
         
-        String posicao = "('center', 'center')";
-        int inicio = 0, duracao = 5;
+        // Variáveis para armazenar os atributos e garantir a ordem de geração
+        String posInput = "centro";
+        int inicio = 0, duracao = 3;
+        List<String> efeitos = new ArrayList<>();
 
         for (var attr : ctx.usarAtributo()) {
-            if (attr.getText().startsWith("posicao")) {
-                 posicao = String.format("(%s, %s)",
-                    processarCoord(attr.coord(0)),
-                    processarCoord(attr.coord(1))
-                );
-            } else if (attr.getText().startsWith("inicio")) {
+            String key = attr.getChild(0).getText();
+            if (key.equals("posicao")) {
+                posInput = unquote(attr.STRING().getText());
+            } else if (key.equals("inicio")) {
                 inicio = Integer.parseInt(attr.INT(0).getText());
                 duracao = Integer.parseInt(attr.INT(1).getText());
+            } else if (key.equals("efeito")) {
+                String nomeEfeito = unquote(attr.efeito().STRING().getText());
+                int tempoEfeito = Integer.parseInt(attr.efeito().INT().getText());
+                efeitos.add(String.format("vfx.%s(%d)", nomeEfeito, tempoEfeito));
             }
         }
         
-        clipes.append(String.format("%s = %s.set_position(%s).set_duration(%d).set_start(%d)\n",
-            nomeVar, recursoId, posicao, duracao, inicio));
-
-        for (var attr : ctx.usarAtributo()) {
-            if (attr.getText().startsWith("efeito")) {
-                for (var e : attr.efeitoLista().efeito()) {
-                    String nomeEfeito = unquote(e.STRING().getText());
-                    int tempoEfeito = Integer.parseInt(e.INT().getText());
-                    applyEffect(clipes, nomeVar, nomeEfeito, tempoEfeito, duracao);
-                }
-            }
+        // CORRIGIDO: Tradução da posição
+        String posFinal = POSICOES.getOrDefault(posInput.toLowerCase(), posInput);
+        
+        // CORRIGIDO: Geração do código na ordem correta
+        imageClips.append(String.format("%s = ImageClip(%s_path)\n", nomeVar, recursoId));
+        imageClips.append(String.format("%s = %s.with_position('%s')\n", nomeVar, nomeVar, posFinal));
+        imageClips.append(String.format("%s = %s.resized(width=%d, height=%d)\n", nomeVar, nomeVar, resolucaoW, resolucaoH));
+        imageClips.append(String.format("%s = %s.with_start(%d).with_duration(%d)\n", nomeVar, nomeVar, inicio, duracao));
+        
+        if (!efeitos.isEmpty()) {
+            imageClips.append(String.format("%s = %s.with_effects([%s])\n", nomeVar, nomeVar, String.join(", ", efeitos)));
         }
-        clipes.append("\n");
+        imageClips.append("\n");
+
         return null;
     }
 
     @Override
     public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) {
-        String id = ctx.ID().getText();
-        int volume = Integer.parseInt(ctx.INT().getText());
+        String recursoId = ctx.ID().getText();
+        int inicio = 0, duracao = -1, volume = 100;
+
+        for (var attr : ctx.audioAtributo()) {
+            if (attr.getText().startsWith("inicio")) {
+                inicio = Integer.parseInt(attr.INT(0).getText());
+                duracao = Integer.parseInt(attr.INT(1).getText());
+            } else if (attr.getText().startsWith("com")) {
+                volume = Integer.parseInt(attr.INT(0).getText());
+            }
+        }
         
-        audio.append("# === Processamento de Áudio ===\n");
-        nomeAudioFinal = id + "_final";
-        audio.append(String.format("%s = %s.volumex(%.2f)\n\n", nomeAudioFinal, id, volume / 100.0));
+        audioProcessing.append(String.format("\naudio = AudioFileClip(%s_path)\n", recursoId));
+        if (duracao != -1) {
+            // CORRIGIDO: subclip -> subclipped
+            audioProcessing.append(String.format("audio = audio.subclipped(%d, %d)\n", inicio, duracao));
+        }
+        if (volume != 100) {
+            // CORRIGIDO: volumex -> with_volume_scaled
+            audioProcessing.append(String.format("audio = audio.with_volume_scaled(%.2f)\n", volume / 100.0));
+        }
         return null;
     }
-    
+
     @Override
     public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) {
-        arquivoSaida = "\"" + unquote(ctx.STRING().getText()) + "\"";
-        int w = Integer.parseInt(ctx.INT(0).getText());
-        int h = Integer.parseInt(ctx.INT(1).getText());
-        resolucao = String.format("size=(%d, %d)", w, h);
+        this.arquivoSaida = unquote(ctx.STRING().getText());
+        this.fps = Integer.parseInt(ctx.INT(0).getText());
+        this.resolucaoW = Integer.parseInt(ctx.INT(1).getText());
+        this.resolucaoH = Integer.parseInt(ctx.INT(2).getText());
         return null;
     }
 
-    // ======= Utilitários =======
-
     private String unquote(String text) {
-        if (text == null || text.length() < 2) {
-            return text;
-        }
+        if (text == null || text.length() < 2) return text;
         return text.substring(1, text.length() - 1);
-    }
-
-    private String processarCoord(VideoLangParser.CoordContext ctx) {
-        if (ctx.POSICAO() != null) {
-            return "'" + ctx.POSICAO().getText() + "'";
-        }
-        if (ctx.STRING() != null) {
-            return "'" + unquote(ctx.STRING().getText()) + "'";
-        }
-        return "'center'";
-    }
-
-    private void applyEffect(StringBuilder builder, String clipVar, String nome, int tempo, int duracaoClip) {
-        switch (nome) {
-            case "fade_in":
-                builder.append(String.format("%s = fadein(%s, %d)\n", clipVar, clipVar, tempo));
-                break;
-            case "fade_out":
-                builder.append(String.format("%s = fadeout(%s, %d)\n", clipVar, clipVar, tempo));
-                break;
-            case "blur_in":
-            case "blur_out":
-                builder.append(String.format("%s = blur(%s, duration=%d)\n", clipVar, clipVar, tempo));
-                break;
-            case "zoom_in":
-                builder.append(String.format("%s = %s.resize(lambda t: 1 + 0.2 * t / %d)\n", clipVar, clipVar, duracaoClip));
-                break;
-            case "zoom_out":
-                builder.append(String.format("%s = %s.resize(lambda t: 1.2 - 0.2 * t / %d)\n", clipVar, clipVar, duracaoClip));
-                break;
-            default:
-                builder.append(String.format("# Efeito '%s' desconhecido\n", nome));
-                break;
-        }
     }
 }

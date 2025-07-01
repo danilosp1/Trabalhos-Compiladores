@@ -1,45 +1,43 @@
-from moviepy.editor import *
-from moviepy.video.fx.all import fadein, fadeout, blur
+from moviepy import ImageClip, AudioFileClip, CompositeVideoClip, TextClip, vfx
 
-# === Recursos carregados ===
-ronaldinho1 = ImageClip("./assets/ronaldinho1.jpg")
-ronaldinho2 = ImageClip("./assets/ronaldinho2.png")
-ronaldinho3 = ImageClip("./assets/ronaldinho3.png")
-trilha_animada = AudioFileClip("./assets/musica_upbeat.mp3")
+ronaldinho1_path = "./assets/ronaldinho1.jpg"
+ronaldinho2_path = "./assets/ronaldinho2.jpg"
+ronaldinho3_path = "./assets/ronaldinho3.jpg"
+trilha_animada_path = "./assets/musica_upbeat.mp3"
 
-# === Texto 1 ===
-texto0 = TextClip(
+txt_clip0 = TextClip(
     text="TOP 10 FOTOS DO BRUXO!!!!",
-    fontsize=72,
-    font="Arial-Bold",
-    color='black'
-).set_position(('centro', '80%')).set_duration(5).set_start(0)
+    font="./assets/ARIAL.TTF",
+    font_size=72,
+    color='white'
+).with_start(0).with_duration(5).with_position('center')
 
-# === Imagem 2 (ronaldinho1) ===
-img1 = ronaldinho1.set_position(('centro', 'centro')).set_duration(5).set_start(5)
-img1 = fadein(img1, 1)
-img1 = fadeout(img1, 1)
+clip0 = ImageClip(ronaldinho1_path)
+clip0 = clip0.with_position('center')
+clip0 = clip0.resized(width=1080, height=1920)
+clip0 = clip0.with_start(5).with_duration(5)
+clip0 = clip0.with_effects([vfx.CrossFadeIn(1)])
 
-# === Imagem 3 (ronaldinho2) ===
-img2 = ronaldinho2.set_position(('centro', 'centro')).set_duration(5).set_start(10)
-img2 = blur(img2, duration=1)
-img2 = blur(img2, duration=1)
+clip1 = ImageClip(ronaldinho2_path)
+clip1 = clip1.with_position('center')
+clip1 = clip1.resized(width=1080, height=1920)
+clip1 = clip1.with_start(10).with_duration(5)
+clip1 = clip1.with_effects([vfx.CrossFadeOut(1)])
 
-# === Imagem 4 (ronaldinho3) ===
-img3 = ronaldinho3.set_position(('centro', 'centro')).set_duration(5).set_start(15)
-img3 = img3.resize(lambda t: 1 + 0.2 * t / 5)
-img3 = img3.resize(lambda t: 1.2 - 0.2 * t / 5)
-
-# === Processamento de Áudio ===
-trilha_animada_final = trilha_animada.volumex(0,80)
+clip2 = ImageClip(ronaldinho3_path)
+clip2 = clip2.with_position('center')
+clip2 = clip2.resized(width=1080, height=1920)
+clip2 = clip2.with_start(15).with_duration(5)
+clip2 = clip2.with_effects([vfx.CrossFadeIn(1)])
 
 
-# === Cena completa ===
-clips = [texto0, img1, img2, img3]
-video = CompositeVideoClip(clips, size=(1080, 1080)).set_duration(21)
+video = CompositeVideoClip([clip0, clip1, clip2], size=(1080, 1920))
 
-# === Adiciona áudio ===
-video = video.set_audio(trilha_animada_final)
+audio = AudioFileClip(trilha_animada_path)
+audio = audio.subclipped(0, 21)
+audio = audio.with_volume_scaled(0,80)
+video = video.with_audio(audio)
 
-# === Exporta vídeo ===
-video.write_videofile("video_ronaldinho.mp4", fps=24)
+final_video = CompositeVideoClip([video, txt_clip0], size=(1080, 1920))
+
+final_video.write_videofile("video_ronaldinho.mp4", fps=24)

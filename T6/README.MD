@@ -104,6 +104,7 @@ video = video.set_audio(trilha_animada_final)
 video.write_videofile("video_ronaldinho.mp4", fps=24)
 
 ```
+### Verificação de Erros
 
 O sistema também possui mecanismos de verificação de erros léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
 
@@ -112,7 +113,7 @@ O sistema também possui mecanismos de verificação de erros léxicos, sintáti
 ```
 
 
-## Requisitos para o Adequado Funcionamento do Sistema: (LEMBRAR DE TALVEZ ADICIONAR OS REQUISITOS DO PYTHON PARA EXECUTAR O VIDEO TAMBEM)
+## Requisitos para o Adequado Funcionamento do Sistema:
 
 Para o correto funcionamento do programa, é necessário o JDK versão 17, como pedido no arquivo pom.xml:
 ```
@@ -222,18 +223,37 @@ Após isso, podemos executar a aplicação com o seguinte comando:
 java -jar target/NossaLexica-1.0-SNAPSHOT.jar exemplos/entrada.txt exemplos/saida.py
 ```
 
-Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaGramatica.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:
+<!-- Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaGramatica.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:
 ```
 mvn clean
-```
+``` -->
 
 ## Geração do vídeo a partir do código gerado
+
+Agora para gerar o vídeo a partir do código gerado pelo nosso compilador, precisamos configurar o ambiente Python: 
+
+(Baixar o Python3...)
+
+Ativar o ambiente virtual
+```
+source venv/bin/activate
+```
+
+Baixar a biblioteca MoviePy juntamente com outras libs necessárias
+```
+pip install -r requirements.txt
+```
+
+Gerar o vídeo de teste com os assets já disponíveis:
+```
+python3 exemplos/saida.py 
+```
 
 
 ## Execução dos testes:
 
 ```
-(talvez fazer script para rodar todos os exemplos de entrada e saida esperados como testes)
+(talvez fazer script para rodar varios exemplos de entrada e saida esperados como testes para mostrar que as analises lexicas, sintaticas e semanticas e geracao de codigo funcionam)
 ```
 
 #### Saída após execução dos testes:

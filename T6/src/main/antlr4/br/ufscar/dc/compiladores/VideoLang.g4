@@ -1,6 +1,7 @@
 grammar VideoLang;
 
 // REGRAS SINTATICAS
+
 program: (declaracao | cena | renderizar)+;
 
 declaracao: 'carregar' ('imagem' | 'audio') ID 'de' STRING;
@@ -14,7 +15,6 @@ cenaCorpo
     | duracaoCena
     ;
 
-// Regra para a duração total da cena/vídeo
 duracaoCena: 'duracao' ':' INT 's';
 
 criarTexto: 'criar' 'texto' STRING '{' textoAtributo+ '}';
@@ -22,33 +22,29 @@ textoAtributo
     : 'fonte' ':' STRING
     | 'tamanho_fonte' ':' INT
     | 'cor' ':' STRING
-    | 'posicao' ':' '(' coord ',' coord ')'
+    | 'posicao' ':' STRING
     | 'inicio' 'em' INT 's' 'por' INT 's'
     ;
 
 usarImagem: 'usar' 'imagem' ID '{' usarAtributo+ '}';
 usarAtributo
-    : 'posicao' ':' '(' coord ',' coord ')'
+    : 'posicao' ':' STRING
     | 'inicio' 'em' INT 's' 'por' INT 's'
-    | 'efeito' ':' efeitoLista
+    | 'efeito' ':' efeito
     ;
 
-// Regra para uma coordenada, que pode ser uma palavra-chave ou um valor customizado
-coord: POSICAO | STRING;
+efeito: STRING 'por' INT 's'; 
 
-efeitoLista: efeito (',' efeito)*;
-efeito: STRING INT 's';
+adicionarAudio: 'adicionar' 'audio' ID '{' audioAtributo+ '}';
+audioAtributo
+    : 'inicio' 'em' INT 's' 'por' INT 's'
+    | 'com' 'volume' INT '%'
+    ;
 
-adicionarAudio: 'adicionar' 'audio' ID 'com' 'volume' INT '%';
-
-renderizar: 'renderizar' 'para' STRING 'com' 'resolucao' '(' INT ',' INT ')';
+renderizar: 'renderizar' 'para' STRING 'com' INT 'fps' 'e' 'resolucao' INT 'x' INT;
 
 // REGRAS LEXICAS
 
-// REGRAS ESPECÍFICAS (PALAVRAS-CHAVE) VÊM PRIMEIRO
-POSICAO: 'centro' | 'esquerda' | 'direita' | 'topo' | 'baixo';
-
-// REGRAS GENÉRICAS VÊM DEPOIS
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
 STRING

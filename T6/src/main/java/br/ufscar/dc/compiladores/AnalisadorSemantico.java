@@ -54,39 +54,37 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         String id = ctx.ID().getText();
 
         if (!tabelaSimbolos.containsKey(id)) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(),
-                    "Imagem '" + id + "' não foi declarada."));
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "Imagem '" + id + "' não foi declarada."));
         } else if (!tabelaSimbolos.get(id).equals("imagem")) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(),
-                    "Identificador '" + id + "' não é do tipo imagem."));
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "Identificador '" + id + "' não é do tipo imagem."));
         }
-
         return super.visitUsarImagem(ctx);
     }
 
     @Override
     public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) {
         if (audioDefinido) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(), "A trilha sonora já foi adicionada. Apenas um áudio principal é permitido."));
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "A trilha sonora já foi adicionada."));
         }
         audioDefinido = true;
-
+        
         String id = ctx.ID().getText();
-        int volume = Integer.parseInt(ctx.INT().getText());
 
         if (!tabelaSimbolos.containsKey(id)) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(),
-                    "Áudio '" + id + "' não foi declarado."));
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "Áudio '" + id + "' não foi declarado."));
         } else if (!tabelaSimbolos.get(id).equals("audio")) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(),
-                    "Identificador '" + id + "' não é do tipo áudio."));
+            erros.add(new ErroSemantico(ctx.getStart().getLine(), "Identificador '" + id + "' não é do tipo áudio."));
         }
 
-        if (volume < 0 || volume > 100) {
-            erros.add(new ErroSemantico(ctx.getStart().getLine(),
-                    "Volume deve estar entre 0 e 100."));
+        // Valida o volume dentro do bloco
+        for (var attr : ctx.audioAtributo()) {
+            if (attr.getText().startsWith("com")) {
+                int volume = Integer.parseInt(attr.INT(0).getText());
+                if (volume < 0 || volume > 100) {
+                    erros.add(new ErroSemantico(ctx.getStart().getLine(), "Volume deve estar entre 0 e 100."));
+                }
+            }
         }
-
         return null;
     }
 
