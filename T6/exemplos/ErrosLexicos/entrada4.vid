@@ -1,9 +1,8 @@
-// Erro Lexico 2:
-// String mal formatada: Na linha 5 e 6 a string não deveria ter uma quebra no meio
+// Erro Lexico 4:
+// Uso de token invalido: Na linha 4 é utilizado o caractere especial não definido @
 
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
-carregar imagem ronaldinho2 de "./assets/ronaldi
-nho2.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
 carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
 carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
 
@@ -42,4 +41,4 @@ cena {
     }
 }
 
-renderizar para "video_ronaldinho.mp4" com 24fps e resolucao 1080 x 1920
+renderizar para "video_ronaldinho.mp4" com 24fps e resolucao 1080 x 1920abcd
