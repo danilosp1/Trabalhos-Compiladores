@@ -1,5 +1,5 @@
 // Erro Lexico 4:
-// Uso de token invalido: Na linha 4 é utilizado o caractere especial não definido @
+// Uso de token invalido: Na linha 44 é utilizado uma resolucao com valor invalido
 
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
