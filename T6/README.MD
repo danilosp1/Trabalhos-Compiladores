@@ -22,7 +22,7 @@ Repositório MoviePy: https://github.com/Zulko/moviepy
 ## Exemplos de Código
 A nossa linguagem simplificada e com recursos no idioma português possui o seguinte funcionamento conforme o exemplo apresentado:
 
-Nossa Linguagem (exemplos/entrada.txt)
+Nossa Linguagem (exemplos/entrada.vid)
 ```
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.png"
@@ -220,7 +220,7 @@ mvn clean package
 
 Após isso, podemos executar a aplicação com o seguinte comando:
 ```
-java -jar target/NossaLexica-1.0-SNAPSHOT.jar exemplos/entrada.txt exemplos/saida.py
+java -jar target/NossaLexica-1.0-SNAPSHOT.jar exemplos/entrada.vid exemplos/saida.py
 ```
 
 <!-- Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaGramatica.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:

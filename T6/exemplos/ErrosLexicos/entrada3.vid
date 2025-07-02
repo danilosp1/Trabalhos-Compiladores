@@ -1,0 +1,48 @@
+// Erro Lexico 3:
+// Comentario de bloco não fechado: Na linha 9 o comentario de bloco é aberto mas nao é fechado 
+
+carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+
+/*
+carregar imagem ronaldinho4 de "./assets/ronaldinho4.jpg"
+
+
+cena {
+    duracao: 21s
+
+    criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 72
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 0s por 5s
+    }
+
+    usar imagem ronaldinho1 {
+        posicao: 'centro'
+        inicio em 5s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+
+    usar imagem ronaldinho2 {
+        posicao: 'centro'
+        inicio em 10s por 5s
+        efeito: 'CrossFadeOut' por 1s
+    }
+
+    usar imagem ronaldinho3 {
+        posicao: 'centro'
+        inicio em 15s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+
+    adicionar audio trilha_animada {
+        inicio em 0s por 21s
+        com volume 80%
+    }
+}
+
+renderizar para "video_ronaldinho.mp4" com 24fps e resolucao 1080 x 1920
