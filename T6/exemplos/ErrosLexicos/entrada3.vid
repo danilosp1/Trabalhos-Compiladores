@@ -9,7 +9,6 @@ carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
 /*
 carregar imagem ronaldinho4 de "./assets/ronaldinho4.jpg"
 
-
 cena {
     duracao: 21s
 

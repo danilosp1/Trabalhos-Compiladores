@@ -1,7 +1,7 @@
 // Erro Lexico 1:
-// Uso de token invalido: Na linha 4 é utilizado o caractere especial não definido @
+// Uso de token invalido: Na linha 4 é utilizado o caractere especial não definido carregar~
 
-carregar imagem @ ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar~ imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
 carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
 carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
