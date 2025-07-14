@@ -1,7 +1,7 @@
 package br.ufscar.dc.compiladores;
 
-import main.java.br.ufscar.dc.compiladores.AnalisadorSemantico;
-import main.java.br.ufscar.dc.compiladores.GeradorDeCodigo;
+import br.ufscar.dc.compiladores.AnalisadorSemantico;
+import br.ufscar.dc.compiladores.GeradorDeCodigo;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;

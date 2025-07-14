@@ -1,4 +1,4 @@
-package main.java.br.ufscar.dc.compiladores;
+package br.ufscar.dc.compiladores;
 
 import br.ufscar.dc.compiladores.VideoLangParser;
 import br.ufscar.dc.compiladores.VideoLangBaseVisitor;
