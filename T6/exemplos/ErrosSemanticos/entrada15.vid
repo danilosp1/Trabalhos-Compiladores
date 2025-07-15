@@ -1,5 +1,5 @@
 // Erro Semantico 15:
-// Cor inexistente: Na linha 16 é usada como posicao um argumento que nao é uma posicao possível 
+// Posicao inexistente: Na linha 16 é usada como posicao um argumento que nao é uma posicao possível 
 
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"

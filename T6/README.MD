@@ -31,43 +31,46 @@ A nossa linguagem simplificada e com recursos no idioma português possui a segu
 Nossa Linguagem (exemplos/entrada.vid)
 ```
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
-carregar imagem ronaldinho2 de "./assets/ronaldinho2.png"
-carregar imagem ronaldinho3 de "./assets/ronaldinho3.png"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
 carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
 
 cena {
     duracao: 21s
 
     criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
-        fonte: "Arial Bold"
+        fonte: './assets/ARIAL.TTF'
         tamanho_fonte: 72
-        cor: 'preto'
-        posicao: (centro, '80%') 
+        cor: 'branco'
+        posicao: 'centro'
         inicio em 0s por 5s
     }
 
     usar imagem ronaldinho1 {
-        posicao: (centro, centro)
+        posicao: 'centro'
         inicio em 5s por 5s
-        efeito: 'fade_in' 1s, 'fade_out' 1s
+        efeito: 'CrossFadeIn' por 1s
     }
 
     usar imagem ronaldinho2 {
-        posicao: (centro, centro)
+        posicao: 'centro'
         inicio em 10s por 5s
-        efeito: 'blur_in' 1s, 'blur_out' 1s
+        efeito: 'CrossFadeOut' por 1s
     }
 
     usar imagem ronaldinho3 {
-        posicao: (centro, centro)
+        posicao: 'centro'
         inicio em 15s por 5s
-        efeito: 'zoom_in' 1s, 'zoom_out' 1s
+        efeito: 'CrossFadeIn' por 1s
     }
 
-    adicionar audio trilha_animada com volume 80%
+    adicionar audio trilha_animada {
+        inicio em 0s por 21s
+        com volume 80%
+    }
 }
 
-renderizar para "video_ronaldinho.mp4" com resolucao (1080, 1080)
+renderizar para "video_ronaldinho.mp4" com 24fps e resolucao 1080 x 1920
 ```
 
 Saída Obtida (exemplos/saidaEsperada.py)
@@ -110,11 +113,68 @@ video = video.set_audio(trilha_animada_final)
 video.write_videofile("video_ronaldinho.mp4", fps=24)
 ```
 
-### Tutorial Passo a Passo da Nossa Linguagem
+## Tutorial Passo a Passo da Nossa Linguagem
 
+Para começar a programar com a nossa Linguagem, você deve:
 
+1) Carregar as imagens e áudios que farão parte do vídeo:
+```
+carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.png"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.png"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+```
+Obs: Note que você obterá erros semânticos se importar arquivos inexistentes ou de arquivos incompatíveis (imagem deve ser: "jpg", "jpeg", "png", "bmp", "gif". E áudio deve ser: "mp3", "wav", "ogg", "aac", "flac")
 
+2) Definir a senha e o tempo de duração total do vídeo:
+```
+cena {
+    duracao: 21s
 
+    (...)
+
+}
+```
+
+3) Incluir os textos, imagens e áudios na cena:
+
+A) Texto: Precisa de texto que será escrito, fonte, tamanho_fonte, cor, posição, inicio (em segundos) e duração (em segundos).
+```
+    criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 72
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 0s por 5s
+    }
+```
+Obs: As cores disponíveis são: "branco", "verde", "amarelo", "azul", "vermelho", "marrom", "roxo" e "preto". <br>
+As posições disponíveis são: "centro", "esquerda", "direita", "topo" e "baixo". <br>
+Você receberá um erro semântico se usar cores ou posições não disponíveis.
+
+B) Imagem: Precisa do nome da imagem carregada, posição, início (em segundos), duração (em segundos) e efeito.
+```
+    usar imagem ronaldinho1 {
+        posicao: 'centro'
+        inicio em 5s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+```
+Obs: Você receberá um erro semântico se usar uma imagem que não foi carregada.
+
+C) Áudio: Precisa do nome do audio carregado, início (em segundos), duração (em segundos) e porcentagem do volume
+```
+    adicionar audio trilha_animada {
+        inicio em 0s por 21s
+        com volume 80%
+    }
+```
+
+4) Incluir a rendenização, com a quantidade de fps e formato de resolução.
+
+```
+renderizar para "video_ronaldinho.mp4" com 24fps e resolucao 1080 x 1920
+```
 
 
 ## Verificação de Erros
@@ -122,17 +182,134 @@ video.write_videofile("video_ronaldinho.mp4", fps=24)
 O sistema também possui mecanismos de verificação de erros através de analisadores léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
 
 ### Análise Léxica
+Erro de token invalido, ocorre nesse exemplo pois foi usado o "~", que é um token que não está presente na nossa linguagem. <br>
+(Exemplo completo em exemplos/ErrosLexicos/entrada1.vid)
+
+Entrada1.vid
 ```
-(exemplo de erros captados, e detalhar melhor quais foram os 3/4 principais erros semanticos que são verificados)
-```
-### Análise Sintática
+// Erro Lexico 1:
+// Uso de token invalido: Na linha 4 é utilizado o caractere especial não definido carregar~
+
+carregar~ imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+
+(...)
 ```
 
+Saida1.py (Erro Lexico Capturado)
+```
+Linha 4: ~ - simbolo nao identificado
+```
+
+### Análise Sintática
+Erro de estrutura errada, ocorre nesse exemplo pois a palavra-chave "de" esta faltando no carregamento da primeira imagem, formando uma estrutura diferente da esperada pela nossa linguagem. <br>
+(Exemplo completo em exemplos/ErrosSintaticos/entrada4.vid)
+
+Entrada4.vid
+```
+// Erro Sintatico 4:
+// Keyword faltando: Na linha 5 a palavra-chave 'de' está faltando 
+
+
+carregar imagem ronaldinho1 "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+
+(...)
+```
+
+Saida4.py (Erro Sintatico Capturado)
+```
+Linha 5: erro sintatico proximo a "./assets/ronaldinho1.jpg"
+Fim da compilacao
 ```
 
 ### Análise Semântica
+O nosso compilador realiza diversas verificações semânticas como esperado pela disciplina, mas por aqui vamos destacar as 3 principais:
+
+A) Detecção de arquivo inexistente, onde no exemplo abaixo tenta-se fazer o carregamento da imagem "./assets/ronaldinho_inexistente.jpg", que por não estar presente no path indicado, gera um erro semantico. <br>
+(Exemplo completo em exemplos/ErrosSemanticos/entrada12.vid)
+
+```
+// Erro Semantico 12:
+// Arquivo inexistente: Na linha 4 é carregado uma imagem que não existe no path indicado
+
+carregar imagem ronaldinho1 de "./assets/ronaldinho_inexistente.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+
+(...)
 ```
 
+saida12.py (Erro semantico capturado)
+```
+Linha 4: Arquivo './assets/ronaldinho_inexistente.jpg' não encontrado.
+Fim da compilacao
+```
+
+B) Detecção de tipos incompatíveis, onde no exemplo abaixo tenta-se fazer o carregamento de um arquivo de áudio mas no formato .jpg, assim gerando um erro semântico. <br>
+(Exemplo completo em exemplos/ErrosSemanticos/entrada11.vid)
+
+```
+// Erro Semantico 11:
+// Tipo de arquivo equivocado: Na linha 7 o audio carregado é um arquivo .jpg, mas deveria ser arquivo de audio
+
+carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar audio trilha_animada de "./assets/ronaldinho_drible.jpg"
+
+(...)
+```
+saida11.py (Erro semantico capturado)
+```
+Linha 7: Arquivo './assets/ronaldinho_drible.jpg' não é um tipo de áudio válido.
+Fim da compilacao
+```
+
+C) Detecção de imagens com inícios sobrepostos, onde no exemplo abaixo tenta-se usar as imagens ronaldinho1 e ronaldinho2 no mesmo tempo de início, assim gerando um erro semântico. <br>
+(Exemplo completo em exemplos/ErrosSemanticos/entrada13.vid)
+
+```
+// Erro Semantico 13:
+// Imagens sobrepostas: Nas linhas 22 e 28 vemos que duas imagens são colocadas no mesmo tempo de inicio
+
+carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
+
+cena {
+    duracao: 21s
+
+    criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 72
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 0s por 5s
+    }
+
+    usar imagem ronaldinho1 {
+        posicao: 'centro'
+        inicio em 5s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+
+    usar imagem ronaldinho2 {
+        posicao: 'centro'
+        inicio em 5s por 5s
+        efeito: 'CrossFadeOut' por 1s
+    }
+(...)
+```
+
+saida13.py (Erro semantico capturado)
+```
+Linha 28: Já existe uma imagem iniciando no tempo 5s.
+Fim da compilacao
 ```
 
 ## Requisitos para o Funcionamento Adequado:
