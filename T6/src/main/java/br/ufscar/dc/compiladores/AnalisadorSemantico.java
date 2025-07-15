@@ -38,10 +38,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
 
     private final Map<String, String> tabelaSimbolos = new HashMap<>();
     private final List<ErroSemantico> erros = new ArrayList<>();
-
-    // Estrutura para rastrear os tempos de início das imagens e evitar sobreposições
     private final Set<Integer> temposDeInicioImagens = new HashSet<>();
 
+    private Integer duracaoTotalCena = null; // Usamos Integer para poder ser nulo
 
     private boolean duracaoCenaDefinida = false;
     private boolean audioDefinido = false;
@@ -68,17 +67,14 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         String id = ctx.ID().getText();
         String caminhoString = ctx.STRING().getText();
         int linha = ctx.getStart().getLine();
-
         if (tabelaSimbolos.containsKey(id)) {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' já declarado anteriormente."));
             return null;
         } else {
             tabelaSimbolos.put(id, tipoDeclarado);
         }
-
         String caminhoArquivo = unquote(caminhoString);
         File arquivo = new File(caminhoArquivo);
-
         if (!arquivo.exists()) {
             erros.add(new ErroSemantico(linha, "Arquivo '" + caminhoArquivo + "' não encontrado."));
         } else {
@@ -98,6 +94,17 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     }
 
     @Override
+    public Void visitDuracaoCena(VideoLangParser.DuracaoCenaContext ctx) {
+        int linha = ctx.getStart().getLine();
+        if (duracaoCenaDefinida) {
+            erros.add(new ErroSemantico(linha, "A duração da cena já foi definida anteriormente."));
+        }
+        this.duracaoTotalCena = Integer.parseInt(ctx.INT().getText());
+        this.duracaoCenaDefinida = true;
+        return super.visitDuracaoCena(ctx);
+    }
+
+    @Override
     public Void visitCriarTexto(VideoLangParser.CriarTextoContext ctx) {
         for (var atributo : ctx.textoAtributo()) {
             int linha = atributo.getStart().getLine();
@@ -106,11 +113,17 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
                 if (!CORES_VALIDAS.contains(cor.toLowerCase())) {
                     erros.add(new ErroSemantico(linha, "Cor '" + cor + "' não é uma cor válida."));
                 }
-            }
-            else if (atributo.POSICAO() != null) {
+            } else if (atributo.POSICAO() != null) {
                 String posicao = unquote(atributo.STRING().getText());
                 if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
                     erros.add(new ErroSemantico(linha, "Posição '" + posicao + "' não é uma posição válida."));
+                }
+            } 
+            else if (atributo.INICIO() != null) {
+                int inicio = Integer.parseInt(atributo.INT(0).getText());
+                int duracao = Integer.parseInt(atributo.INT(1).getText());
+                if (duracaoTotalCena != null && (inicio + duracao) > duracaoTotalCena) {
+                    erros.add(new ErroSemantico(linha, "O tempo final do texto (" + (inicio + duracao) + "s) ultrapassa a duração total da cena (" + duracaoTotalCena + "s)."));
                 }
             }
         }
@@ -127,8 +140,7 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         } else if (!tabelaSimbolos.get(id).equals("imagem")) {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' não é do tipo imagem."));
         }
-
-        // Itera sobre todos os atributos para validar posição, efeito e tempo
+        
         for (var atributo : ctx.usarAtributo()) {
             int linhaAtributo = atributo.getStart().getLine();
             
@@ -137,27 +149,26 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
                 if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
                     erros.add(new ErroSemantico(linhaAtributo, "Posição '" + posicao + "' não é uma posição válida."));
                 }
-            } 
-            else if (atributo.EFEITO() != null) {
+            } else if (atributo.EFEITO() != null) {
                 String efeito = unquote(atributo.efeito().STRING().getText());
                 if (!EFEITOS_VALIDOS.contains(efeito)) {
                     erros.add(new ErroSemantico(linhaAtributo, "Efeito '" + efeito + "' não é um efeito válido."));
                 }
-            }
-            // Adiciona a verificação de tempo de início
-            else if (atributo.INICIO() != null) {
-                int tempoInicio = Integer.parseInt(atributo.INT(0).getText());
+            } else if (atributo.INICIO() != null) {
+                int inicio = Integer.parseInt(atributo.INT(0).getText());
+                int duracao = Integer.parseInt(atributo.INT(1).getText());
                 
-                // Verifica se o tempo de início já foi usado
-                if (temposDeInicioImagens.contains(tempoInicio)) {
-                    erros.add(new ErroSemantico(linhaAtributo, "Já existe uma imagem iniciando no tempo " + tempoInicio + "s."));
+                if (temposDeInicioImagens.contains(inicio)) {
+                    erros.add(new ErroSemantico(linhaAtributo, "Já existe uma imagem iniciando no tempo " + inicio + "s."));
                 } else {
-                    // Se não foi usado, adiciona ao conjunto para futuras verificações
-                    temposDeInicioImagens.add(tempoInicio);
+                    temposDeInicioImagens.add(inicio);
+                }
+                
+                if (duracaoTotalCena != null && (inicio + duracao) > duracaoTotalCena) {
+                    erros.add(new ErroSemantico(linhaAtributo, "O tempo final da imagem (" + (inicio + duracao) + "s) ultrapassa a duração total da cena (" + duracaoTotalCena + "s)."));
                 }
             }
         }
-
         return super.visitUsarImagem(ctx);
     }
     
@@ -176,9 +187,16 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' não é do tipo áudio."));
         }
 
-        for (var attr : ctx.audioAtributo()) {
-            if (attr.getText().startsWith("com")) {
-                int volume = Integer.parseInt(attr.INT(0).getText());
+        for (var atributo : ctx.audioAtributo()) {
+            if (atributo.INICIO() != null) {
+                int inicio = Integer.parseInt(atributo.INT(0).getText());
+                int duracao = Integer.parseInt(atributo.INT(1).getText());
+                if (duracaoTotalCena != null && (inicio + duracao) > duracaoTotalCena) {
+                    erros.add(new ErroSemantico(atributo.getStart().getLine(), "O tempo final do áudio (" + (inicio + duracao) + "s) ultrapassa a duração total da cena (" + duracaoTotalCena + "s)."));
+                }
+            }
+            else if (atributo.getText().startsWith("com")) {
+                int volume = Integer.parseInt(atributo.INT(0).getText());
                 if (volume < 0 || volume > 100) {
                     erros.add(new ErroSemantico(linha, "Volume deve estar entre 0 e 100."));
                 }
