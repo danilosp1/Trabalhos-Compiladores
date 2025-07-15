@@ -29,10 +29,13 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
     
     static {
         CORES.put("branco", "white");
-        CORES.put("preto", "black");
-        CORES.put("vermelho", "red");
         CORES.put("verde", "green");
+        CORES.put("amarelo", "yellow");
         CORES.put("azul", "blue");
+        CORES.put("vermelho", "red");
+        CORES.put("marrom", "brown");
+        CORES.put("roxo", "purple");
+        CORES.put("preto", "black");
 
         POSICOES.put("centro", "center");
         POSICOES.put("esquerda", "left");
