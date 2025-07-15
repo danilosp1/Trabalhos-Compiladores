@@ -39,6 +39,10 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     private final Map<String, String> tabelaSimbolos = new HashMap<>();
     private final List<ErroSemantico> erros = new ArrayList<>();
 
+    // Estrutura para rastrear os tempos de início das imagens e evitar sobreposições
+    private final Set<Integer> temposDeInicioImagens = new HashSet<>();
+
+
     private boolean duracaoCenaDefinida = false;
     private boolean audioDefinido = false;
     private boolean renderizacaoDefinida = false;
@@ -124,25 +128,32 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' não é do tipo imagem."));
         }
 
-        // Itera sobre todos os atributos para validar posição e efeito
+        // Itera sobre todos os atributos para validar posição, efeito e tempo
         for (var atributo : ctx.usarAtributo()) {
             int linhaAtributo = atributo.getStart().getLine();
             
-            // Valida a posição
             if (atributo.POSICAO() != null) {
                 String posicao = unquote(atributo.STRING().getText());
                 if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
                     erros.add(new ErroSemantico(linhaAtributo, "Posição '" + posicao + "' não é uma posição válida."));
                 }
             } 
-            // Valida o efeito
             else if (atributo.EFEITO() != null) {
-                // Acessa o nome do efeito através do contexto 'efeito'
                 String efeito = unquote(atributo.efeito().STRING().getText());
                 if (!EFEITOS_VALIDOS.contains(efeito)) {
-                    // Note: não usamos toLowerCase() aqui, pois os nomes dos efeitos parecem ser case-sensitive.
-                    // Se quisesse que fossem insensíveis, seria só adicionar .toLowerCase()
                     erros.add(new ErroSemantico(linhaAtributo, "Efeito '" + efeito + "' não é um efeito válido."));
+                }
+            }
+            // Adiciona a verificação de tempo de início
+            else if (atributo.INICIO() != null) {
+                int tempoInicio = Integer.parseInt(atributo.INT(0).getText());
+                
+                // Verifica se o tempo de início já foi usado
+                if (temposDeInicioImagens.contains(tempoInicio)) {
+                    erros.add(new ErroSemantico(linhaAtributo, "Já existe uma imagem iniciando no tempo " + tempoInicio + "s."));
+                } else {
+                    // Se não foi usado, adiciona ao conjunto para futuras verificações
+                    temposDeInicioImagens.add(tempoInicio);
                 }
             }
         }
