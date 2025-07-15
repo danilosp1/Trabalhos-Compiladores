@@ -20,8 +20,6 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
     private int resolucaoH = 1920;
     private int fps = 24;
     private String arquivoSaida = "video_final.mp4";
-
-    // --- INÍCIO DAS MUDANÇAS ---
     
     // Mapeamento para tradução de cores e posições
     private static final Map<String, String> CORES = new HashMap<>();
@@ -45,7 +43,6 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
     }
 
     public String getCodigoGerado() {
-        // CORRIGIDO: Import explícito dos módulos
         imports.append("from moviepy import ImageClip, AudioFileClip, CompositeVideoClip, TextClip, vfx");
 
         composition.append("video = CompositeVideoClip([")
@@ -76,7 +73,6 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
     
     @Override
     public Void visitProgram(VideoLangParser.ProgramContext ctx) {
-        // O import agora é gerado no final, no método getCodigoGerado
         visitChildren(ctx);
         return null;
     }
@@ -113,7 +109,6 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
             }
         }
 
-        // CORRIGIDO: Tradução de cor e posição
         String corFinal = CORES.getOrDefault(corInput.toLowerCase(), corInput);
         String posFinal = POSICOES.getOrDefault(posInput.toLowerCase(), posInput);
 
@@ -151,10 +146,8 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
             }
         }
         
-        // CORRIGIDO: Tradução da posição
         String posFinal = POSICOES.getOrDefault(posInput.toLowerCase(), posInput);
         
-        // CORRIGIDO: Geração do código na ordem correta
         imageClips.append(String.format("%s = ImageClip(%s_path)\n", nomeVar, recursoId));
         imageClips.append(String.format("%s = %s.with_position('%s')\n", nomeVar, nomeVar, posFinal));
         imageClips.append(String.format("%s = %s.resized(width=%d, height=%d)\n", nomeVar, nomeVar, resolucaoW, resolucaoH));
@@ -184,11 +177,9 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
         
         audioProcessing.append(String.format("\naudio = AudioFileClip(%s_path)\n", recursoId));
         if (duracao != -1) {
-            // CORRIGIDO: subclip -> subclipped
             audioProcessing.append(String.format("audio = audio.subclipped(%d, %d)\n", inicio, duracao));
         }
         if (volume != 100) {
-            // CORRIGIDO: volumex -> with_volume_scaled
             audioProcessing.append(String.format("audio = audio.with_volume_scaled(%.2f)\n", volume / 100.0));
         }
         return null;

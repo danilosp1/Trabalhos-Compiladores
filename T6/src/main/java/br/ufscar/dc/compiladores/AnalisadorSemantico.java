@@ -17,6 +17,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     private static final List<String> POSICOES_VALIDAS = Arrays.asList(
         "centro", "esquerda", "direita", "topo", "baixo"
     );
+    private static final List<String> EFEITOS_VALIDOS = Arrays.asList(
+        "CrossFadeIn", "CrossFadeOut"
+    );
 
     public static class ErroSemantico {
         public final int linha;
@@ -92,18 +95,14 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
 
     @Override
     public Void visitCriarTexto(VideoLangParser.CriarTextoContext ctx) {
-        // Itera sobre todos os atributos para validar cor e posição
         for (var atributo : ctx.textoAtributo()) {
             int linha = atributo.getStart().getLine();
-
-            // Valida a cor
             if (atributo.COR() != null) {
                 String cor = unquote(atributo.STRING().getText());
                 if (!CORES_VALIDAS.contains(cor.toLowerCase())) {
                     erros.add(new ErroSemantico(linha, "Cor '" + cor + "' não é uma cor válida."));
                 }
             }
-            // Valida a posição
             else if (atributo.POSICAO() != null) {
                 String posicao = unquote(atributo.STRING().getText());
                 if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
@@ -119,23 +118,31 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         String id = ctx.ID().getText();
         int linha = ctx.getStart().getLine();
 
-        // Verificação de declaração (já existente)
         if (!tabelaSimbolos.containsKey(id)) {
             erros.add(new ErroSemantico(linha, "Imagem '" + id + "' não foi declarada."));
         } else if (!tabelaSimbolos.get(id).equals("imagem")) {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' não é do tipo imagem."));
         }
 
-        // Itera sobre todos os atributos para validar a posição
+        // Itera sobre todos os atributos para validar posição e efeito
         for (var atributo : ctx.usarAtributo()) {
-            // Verifica se o atributo é uma definição de posição
+            int linhaAtributo = atributo.getStart().getLine();
+            
+            // Valida a posição
             if (atributo.POSICAO() != null) {
                 String posicao = unquote(atributo.STRING().getText());
-                int linhaAtributo = atributo.getStart().getLine();
-                
-                // Valida a posição
                 if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
                     erros.add(new ErroSemantico(linhaAtributo, "Posição '" + posicao + "' não é uma posição válida."));
+                }
+            } 
+            // Valida o efeito
+            else if (atributo.EFEITO() != null) {
+                // Acessa o nome do efeito através do contexto 'efeito'
+                String efeito = unquote(atributo.efeito().STRING().getText());
+                if (!EFEITOS_VALIDOS.contains(efeito)) {
+                    // Note: não usamos toLowerCase() aqui, pois os nomes dos efeitos parecem ser case-sensitive.
+                    // Se quisesse que fossem insensíveis, seria só adicionar .toLowerCase()
+                    erros.add(new ErroSemantico(linhaAtributo, "Efeito '" + efeito + "' não é um efeito válido."));
                 }
             }
         }
