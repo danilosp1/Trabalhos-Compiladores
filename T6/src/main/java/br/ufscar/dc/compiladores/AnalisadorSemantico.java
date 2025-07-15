@@ -3,13 +3,19 @@ package br.ufscar.dc.compiladores;
 import br.ufscar.dc.compiladores.VideoLangBaseVisitor;
 import br.ufscar.dc.compiladores.VideoLangParser;
 
-import java.io.File; // <-- IMPORTAÇÃO NECESSÁRIA
+import java.io.File;
 import java.util.*;
 
 public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
 
+    // --- INÍCIO DAS NOVAS ADIÇÕES ---
+    // Listas de extensões de arquivo válidas
+    private static final List<String> EXTENSOES_IMAGEM = Arrays.asList("jpg", "jpeg", "png", "bmp", "gif");
+    private static final List<String> EXTENSOES_AUDIO = Arrays.asList("mp3", "wav", "ogg", "aac", "flac");
+    // --- FIM DAS NOVAS ADIÇÕES ---
+
     public static class ErroSemantico {
-        // ... (nenhuma mudança nesta classe interna)
+        // ... (nenhuma mudança)
         public final int linha;
         public final String mensagem;
 
@@ -24,10 +30,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         }
     }
 
-    private final Map<String, String> tabelaSimbolos = new HashMap<>(); // id -> tipo
+    private final Map<String, String> tabelaSimbolos = new HashMap<>();
     private final List<ErroSemantico> erros = new ArrayList<>();
 
-    // Flags para garantir declarações únicas
     private boolean duracaoCenaDefinida = false;
     private boolean audioDefinido = false;
     private boolean renderizacaoDefinida = false;
@@ -36,15 +41,24 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         return erros;
     }
 
-    // Função auxiliar para remover aspas de uma string
     private String unquote(String text) {
         if (text == null || text.length() < 2) return text;
         return text.substring(1, text.length() - 1);
     }
+    
+    // --- INÍCIO DAS NOVAS ADIÇÕES ---
+    // Função auxiliar para obter a extensão de um arquivo
+    private Optional<String> getFileExtension(String filename) {
+        return Optional.ofNullable(filename)
+          .filter(f -> f.contains("."))
+          .map(f -> f.substring(filename.lastIndexOf(".") + 1).toLowerCase());
+    }
+    // --- FIM DAS NOVAS ADIÇÕES ---
+
 
     @Override
     public Void visitDeclaracao(VideoLangParser.DeclaracaoContext ctx) {
-        String tipo = ctx.getChild(1).getText();
+        String tipoDeclarado = ctx.getChild(1).getText(); // "imagem" ou "audio"
         String id = ctx.ID().getText();
         String caminhoString = ctx.STRING().getText();
         int linha = ctx.getStart().getLine();
@@ -52,27 +66,43 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         // 1. Verifica se o identificador já foi declarado
         if (tabelaSimbolos.containsKey(id)) {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' já declarado anteriormente."));
+            // Retorna aqui para evitar erros em cascata
+            return null;
         } else {
-            tabelaSimbolos.put(id, tipo);
+            tabelaSimbolos.put(id, tipoDeclarado);
         }
 
-        // --- INÍCIO DA NOVA LÓGICA ---
-        // 2. Verifica se o arquivo no caminho especificado existe
         String caminhoArquivo = unquote(caminhoString);
         File arquivo = new File(caminhoArquivo);
 
+        // 2. Verifica se o arquivo existe. Se não, não podemos verificar a extensão.
         if (!arquivo.exists()) {
             erros.add(new ErroSemantico(linha, "Arquivo '" + caminhoArquivo + "' não encontrado."));
+        } else {
+            // --- INÍCIO DA NOVA LÓGICA DE VERIFICAÇÃO DE TIPO ---
+            // 3. Se o arquivo existe, verifica se a extensão é compatível com o tipo declarado
+            Optional<String> extensaoOpt = getFileExtension(caminhoArquivo);
+            
+            if (extensaoOpt.isPresent()) {
+                String extensao = extensaoOpt.get();
+                if (tipoDeclarado.equals("imagem") && !EXTENSOES_IMAGEM.contains(extensao)) {
+                    erros.add(new ErroSemantico(linha, "Arquivo '" + caminhoArquivo + "' não é um tipo de imagem válido."));
+                } else if (tipoDeclarado.equals("audio") && !EXTENSOES_AUDIO.contains(extensao)) {
+                    erros.add(new ErroSemantico(linha, "Arquivo '" + caminhoArquivo + "' não é um tipo de áudio válido."));
+                }
+            } else {
+                // Arquivo sem extensão, também pode ser considerado um erro
+                erros.add(new ErroSemantico(linha, "Arquivo '" + caminhoArquivo + "' não possui uma extensão de arquivo."));
+            }
+            // --- FIM DA NOVA LÓGICA DE VERIFICAÇÃO DE TIPO ---
         }
-        // --- FIM DA NOVA LÓGICA ---
 
         return null;
     }
 
-    // O restante da classe permanece o mesmo...
-
+    // O restante do código permanece exatamente o mesmo
     @Override
-    public Void visitUsarImagem(VideoLangParser.UsarImagemContext ctx) {
+    public Void visitUsarImagem(VideoLangParser.UsarImagemContext ctx) { //...
         String id = ctx.ID().getText();
         int linha = ctx.getStart().getLine();
 
@@ -83,9 +113,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         }
         return super.visitUsarImagem(ctx);
     }
-
+    
     @Override
-    public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) {
+    public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) { //...
         int linha = ctx.getStart().getLine();
         if (audioDefinido) {
             erros.add(new ErroSemantico(linha, "A trilha sonora já foi adicionada."));
@@ -110,9 +140,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         }
         return null;
     }
-
+    
     @Override
-    public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) {
+    public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) { //...
         int linha = ctx.getStart().getLine();
         if (renderizacaoDefinida) {
             erros.add(new ErroSemantico(linha, "A configuração de renderização já foi definida."));
