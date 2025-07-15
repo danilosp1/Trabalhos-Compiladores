@@ -1,6 +1,6 @@
 # Trabalho 6 de Compiladores
 Professor Daniel Lucrédio <br>
-1 de Julho de 2025
+Julho de 2025
 
 Integrantes:
 - Danilo da Silva Pinto, 811537
@@ -11,6 +11,12 @@ Integrantes:
 
 Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar vídeos customizáveis através da junção de Imagens, Áudios, Legendas e Efeitos de transição e edição.
 
+
+(GIF de exemplo de vídeos gerados com nossa linguagem:) 
+
+(...)
+
+
 Para que isso seja possível, nosso compilador conta com um sistema de geração de código Python compatível com a biblioteca MoviePy que é capaz de executar de fato os comandos descritos na nossa linguagem simplificada.
 
 Documentação MoviePy: https://zulko.github.io/moviepy
@@ -19,8 +25,8 @@ Repositório MoviePy: https://github.com/Zulko/moviepy
 ## Vídeo de Apresentação
 ....
 
-## Exemplos de Código
-A nossa linguagem simplificada e com recursos no idioma português possui o seguinte funcionamento conforme o exemplo apresentado:
+## Programando com a Nossa Linguagem
+A nossa linguagem simplificada e com recursos no idioma português possui a seguinte estrutura de código conforme mostrado no exemplo abaixo:
 
 Nossa Linguagem (exemplos/entrada.vid)
 ```
@@ -102,18 +108,36 @@ video = CompositeVideoClip(clips, size=(1080, 1080)).set_duration(21)
 video = video.set_audio(trilha_animada_final)
 
 video.write_videofile("video_ronaldinho.mp4", fps=24)
-
 ```
-### Verificação de Erros
 
-O sistema também possui mecanismos de verificação de erros léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
+### Tutorial Passo a Passo da Nossa Linguagem
 
+
+
+
+
+
+## Verificação de Erros
+
+O sistema também possui mecanismos de verificação de erros através de analisadores léxicos, sintáticos e semânticos, como mostrado no exemplo abaixo:
+
+### Análise Léxica
 ```
 (exemplo de erros captados, e detalhar melhor quais foram os 3/4 principais erros semanticos que são verificados)
 ```
+### Análise Sintática
+```
 
+```
 
-## Requisitos para o Adequado Funcionamento do Sistema:
+### Análise Semântica
+```
+
+```
+
+## Requisitos para o Funcionamento Adequado:
+### Configurações Java
+O Java é usado para compilar a linguagem e fazer a geração do código necessário
 
 Para o correto funcionamento do programa, é necessário o JDK versão 17, como pedido no arquivo pom.xml:
 ```
@@ -142,16 +166,34 @@ Default locale: en_US, platform encoding: UTF-8
 OS name: "linux", version: "5.15.0-136-generic", arch: "amd64", family: "unix"
 ```
 
+### Configurações Python3
+O Python3 é usado para executar o código que será gerado na linguagem Python com a Biblioteca MoviePy para construir o vídeo desejado
 
-
-## Compilação e Geração dos Pacotes:
-
-Após clonar o repositório:
 ```
-git clone https://github.com/danilosp1/Trabalhos-Compiladores.git
+(Baixar instalar o Python3...)
 ```
-Deve-se entrar para dentro dele e utilizar o comando abaixo, obtendo um "BUILD SUCCES", semelhante ao listado.
-Além disso, esse comando também deve gerar o arquivo "NossaLexica-1.0-SNAPSHOT.jar" na pasta "target".
+
+Dentro do projeto, criar as variáveis de ambiente para fazer instalações:
+```
+git clone https://github.com/danilosp1/Trabalhos-Compiladores
+cd Trabalhos-Compiladores/T6
+
+python3 -m venv venv
+```
+
+Ativar o ambiente virtual
+```
+source venv/bin/activate
+```
+
+Baixar a biblioteca MoviePy juntamente com outras libs necessárias
+```
+pip install -r requirements.txt
+```
+
+## Compilação e Execução do Programa
+
+Agora para fazer o build do compilador Java, usaremos o comando abaixo:
 ```
 mvn clean package
 ```
@@ -168,44 +210,9 @@ mvn clean package
 [INFO] 
 [INFO] --- antlr4:4.13.2:antlr4 (antlr) @ NossaLexica ---
 [INFO] ANTLR 4: Processing source directory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/src/main/antlr4
-[INFO] Processing grammar: br/ufscar/dc/compiladores/NossaGramatica.g4
-[INFO] 
-[INFO] --- resources:3.3.1:resources (default-resources) @ NossaLexica ---
-[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/src/main/resources
-[INFO] 
-[INFO] --- compiler:3.13.0:compile (default-compile) @ NossaLexica ---
-[INFO] Recompiling the module because of changed source code.
-[INFO] Compiling 9 source files with javac [debug target 17] to target/classes
-[WARNING] system modules path not set in conjunction with -source 17
-[INFO] 
-[INFO] --- resources:3.3.1:testResources (default-testResources) @ NossaLexica ---
-[INFO] skip non existing resourceDirectory /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/src/test/resources
-[INFO] 
-[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ NossaLexica ---
-[INFO] No sources to compile
-[INFO] 
-[INFO] --- surefire:3.2.5:test (default-test) @ NossaLexica ---
-[INFO] No tests to run.
-[INFO] 
-[INFO] --- jar:3.4.1:jar (default-jar) @ NossaLexica ---
-[INFO] Building jar: /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/target/NossaLexica-1.0-SNAPSHOT.jar
-[INFO] 
-[INFO] --- shade:3.4.1:shade (default) @ NossaLexica ---
-[INFO] Including org.antlr:antlr4:jar:4.13.2 in the shaded jar.
-[INFO] Including org.antlr:antlr4-runtime:jar:4.13.2 in the shaded jar.
-[INFO] Including org.antlr:antlr-runtime:jar:3.5.3 in the shaded jar.
-[INFO] Including org.antlr:ST4:jar:4.3.4 in the shaded jar.
-[INFO] Including org.abego.treelayout:org.abego.treelayout.core:jar:1.0.3 in the shaded jar.
-[INFO] Including com.ibm.icu:icu4j:jar:72.1 in the shaded jar.
-[WARNING] NossaLexica-1.0-SNAPSHOT.jar, ST4-4.3.4.jar, antlr-runtime-3.5.3.jar, antlr4-4.13.2.jar, antlr4-runtime-4.13.2.jar, icu4j-72.1.jar, org.abego.treelayout.core-1.0.3.jar define 1 overlapping resource: 
-[WARNING]   - META-INF/MANIFEST.MF
-[WARNING] maven-shade-plugin has detected that some class files are
-[WARNING] present in two or more JARs. When this happens, only one
-[WARNING] single version of the class is copied to the uber jar.
-[WARNING] Usually this is not harmful and you can skip these warnings,
-[WARNING] otherwise try to manually exclude artifacts based on
-[WARNING] mvn dependency:tree -Ddetail=true and the above output.
-[WARNING] See https://maven.apache.org/plugins/maven-shade-plugin/
+
+(...)
+
 [INFO] Replacing original artifact with shaded artifact.
 [INFO] Replacing /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/target/NossaLexica-1.0-SNAPSHOT.jar with /Users/danilosp/Desktop/Folder/Faculdade/Compiladores/Trabalho-Compiladores/T5/target/NossaLexica-1.0-SNAPSHOT-shaded.jar
 [INFO] ------------------------------------------------------------------------
@@ -215,53 +222,20 @@ mvn clean package
 [INFO] Finished at: 2025-06-11T20:12:12-03:00
 [INFO] ------------------------------------------------------------------------
 ```
+Obs: Além disso, esse comando também deve gerar o arquivo "NossaLexica-1.0-SNAPSHOT.jar" na pasta "target".
 
-## Execução do programa:
 
-Após isso, podemos executar a aplicação com o seguinte comando:
+### Após a geração dos packages, podemos executar a aplicação com o seguinte comando:
 ```
 java -jar target/NossaLexica-1.0-SNAPSHOT.jar exemplos/entrada.vid exemplos/saida.py
 ```
 
-<!-- Observação: Se estiver encontrando erros na execução após alterar o arquivo NossaGramatica.g4, deve-se utilizar o seguinte comando para limpar a pasta target e começar novamente o passo a passo:
-```
-mvn clean
-``` -->
-
-## Geração do vídeo a partir do código gerado
-
-Agora para gerar o vídeo a partir do código gerado pelo nosso compilador, precisamos configurar o ambiente Python: 
-
-(Baixar o Python3...)
-
-Criar as variáveis de ambiente para fazer instalações locais e não globais:
-```
-python3 -m venv venv
-```
-
-Ativar o ambiente virtual
-```
-source venv/bin/activate
-```
-
-Baixar a biblioteca MoviePy juntamente com outras libs necessárias
-```
-pip install -r requirements.txt
-```
-
-Gerar o vídeo de teste com os assets já disponíveis:
+Gerar o vídeo descrito em "exemplos/entrada.vid" utilizando os assets já disponíveis no nosso repositório:
 ```
 python3 exemplos/saida.py 
 ```
 
 
-## Execução dos testes:
+## Execução dos Testes
 
-```
-(talvez fazer script para rodar varios exemplos de entrada e saida esperados como testes para mostrar que as analises lexicas, sintaticas e semanticas e geracao de codigo funcionam)
-```
-
-#### Saída após execução dos testes:
-```
-(saidas obtidas com esses testes, mostrar que ele captou os erros lexicos/sintaticos/semanticos corretamente onde tinha e gerou o código python corretamente onde tinha) 
-```
+Para verificar o correto funcionamento do nosso programa, basta ir na pasta "exemplos" e confirmar o comportamento esperado para os diversos arquivos de entrada e seus respectivos arquivos de saída nas pastas ErrosLexicos, ErrosSintaticos, ErrosSemanticos e as GeracoesCodigoCorreto.
