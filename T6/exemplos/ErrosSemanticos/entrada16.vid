@@ -1,5 +1,5 @@
 // Erro Semantico 16:
-// Cor inexistente: Na linha 16 é usada como posicao um argumento que nao é uma posicao possível 
+// Cor inexistente: Na linha 23 é usada como efeito um argumento que nao é um efito possível 
 
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
@@ -13,14 +13,14 @@ cena {
         fonte: './assets/ARIAL.TTF'
         tamanho_fonte: 72
         cor: 'branco'
-        posicao: 'goleiro-substituto'
+        posicao: 'centro'
         inicio em 0s por 5s
     }
 
     usar imagem ronaldinho1 {
         posicao: 'centro'
         inicio em 5s por 5s
-        efeito: 'CrossFadeIn' por 1s
+        efeito: 'EntradaDiagonalTriplaCarpada' por 1s
     }
 
     usar imagem ronaldinho2 {

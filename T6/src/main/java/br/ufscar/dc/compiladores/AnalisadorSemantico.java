@@ -14,6 +14,9 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     private static final List<String> CORES_VALIDAS = Arrays.asList(
         "branco", "verde", "amarelo", "azul", "vermelho", "marrom", "roxo", "preto"
     );
+    private static final List<String> POSICOES_VALIDAS = Arrays.asList(
+        "centro", "esquerda", "direita", "topo", "baixo"
+    );
 
     public static class ErroSemantico {
         public final int linha;
@@ -89,41 +92,59 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
 
     @Override
     public Void visitCriarTexto(VideoLangParser.CriarTextoContext ctx) {
-        // Itera sobre todos os atributos do texto para encontrar a cor
+        // Itera sobre todos os atributos para validar cor e posição
         for (var atributo : ctx.textoAtributo()) {
-            // Verifica se o atributo é uma definição de cor
-            if (atributo.COR() != null) {
-                // Obtém o valor da cor e remove as aspas
-                String cor = unquote(atributo.STRING().getText());
-                int linha = atributo.getStart().getLine();
+            int linha = atributo.getStart().getLine();
 
-                // Verifica se a cor fornecida está na lista de cores válidas
-                // Usamos toLowerCase() para tornar a verificação insensível a maiúsculas/minúsculas
+            // Valida a cor
+            if (atributo.COR() != null) {
+                String cor = unquote(atributo.STRING().getText());
                 if (!CORES_VALIDAS.contains(cor.toLowerCase())) {
                     erros.add(new ErroSemantico(linha, "Cor '" + cor + "' não é uma cor válida."));
                 }
-                
-                // Podemos parar de procurar após encontrar o atributo de cor
-                break; 
+            }
+            // Valida a posição
+            else if (atributo.POSICAO() != null) {
+                String posicao = unquote(atributo.STRING().getText());
+                if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
+                    erros.add(new ErroSemantico(linha, "Posição '" + posicao + "' não é uma posição válida."));
+                }
             }
         }
-        return super.visitCriarTexto(ctx); // Continua visitando outros nós, se necessário
+        return super.visitCriarTexto(ctx);
     }
 
     @Override
-    public Void visitUsarImagem(VideoLangParser.UsarImagemContext ctx) { //...
+    public Void visitUsarImagem(VideoLangParser.UsarImagemContext ctx) {
         String id = ctx.ID().getText();
         int linha = ctx.getStart().getLine();
+
+        // Verificação de declaração (já existente)
         if (!tabelaSimbolos.containsKey(id)) {
             erros.add(new ErroSemantico(linha, "Imagem '" + id + "' não foi declarada."));
         } else if (!tabelaSimbolos.get(id).equals("imagem")) {
             erros.add(new ErroSemantico(linha, "Identificador '" + id + "' não é do tipo imagem."));
         }
+
+        // Itera sobre todos os atributos para validar a posição
+        for (var atributo : ctx.usarAtributo()) {
+            // Verifica se o atributo é uma definição de posição
+            if (atributo.POSICAO() != null) {
+                String posicao = unquote(atributo.STRING().getText());
+                int linhaAtributo = atributo.getStart().getLine();
+                
+                // Valida a posição
+                if (!POSICOES_VALIDAS.contains(posicao.toLowerCase())) {
+                    erros.add(new ErroSemantico(linhaAtributo, "Posição '" + posicao + "' não é uma posição válida."));
+                }
+            }
+        }
+
         return super.visitUsarImagem(ctx);
     }
     
     @Override
-    public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) { //...
+    public Void visitAdicionarAudio(VideoLangParser.AdicionarAudioContext ctx) { 
         int linha = ctx.getStart().getLine();
         if (audioDefinido) {
             erros.add(new ErroSemantico(linha, "A trilha sonora já foi adicionada."));
@@ -149,7 +170,7 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
     }
     
     @Override
-    public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) { //...
+    public Void visitRenderizar(VideoLangParser.RenderizarContext ctx) { 
         int linha = ctx.getStart().getLine();
         if (renderizacaoDefinida) {
             erros.add(new ErroSemantico(linha, "A configuração de renderização já foi definida."));

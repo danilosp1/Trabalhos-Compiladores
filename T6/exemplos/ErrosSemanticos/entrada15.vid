@@ -1,5 +1,5 @@
 // Erro Semantico 15:
-// Cor inexistente: Na linha 15 é usada como cor um argumento que nao é uma cor possível 
+// Cor inexistente: Na linha 16 é usada como posicao um argumento que nao é uma posicao possível 
 
 carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
 carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
@@ -12,8 +12,8 @@ cena {
     criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
         fonte: './assets/ARIAL.TTF'
         tamanho_fonte: 72
-        cor: 'michaeljordan'
-        posicao: 'centro'
+        cor: 'branco'
+        posicao: 'goleiro-substituto'
         inicio em 0s por 5s
     }
 
