@@ -12,7 +12,7 @@ Integrantes:
 Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar vídeos customizáveis através da junção de Imagens, Áudios, Legendas e Efeitos de transição e edição.
 
 
-(Exemplo de vídeo gerado com nossa linguagem) 
+**Exemplo de vídeos gerados com nossa Linguagem:**
 
 <table>
   <tr>
@@ -37,7 +37,8 @@ Documentação MoviePy: https://zulko.github.io/moviepy
 Repositório MoviePy: https://github.com/Zulko/moviepy
 
 ## Vídeo de Apresentação
-....
+
+[![Video de Apresentacao](assets/thumbnail-video.png)](https://drive.google.com/file/d/1wUjG827RhkBr4cChTstuRJ1TZOQMCYX7/view?usp=drivesdk)
 
 ## Programando com a Nossa Linguagem
 A nossa linguagem simplificada e com recursos no idioma português possui a seguinte estrutura de código conforme mostrado no exemplo abaixo:
