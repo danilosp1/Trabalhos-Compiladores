@@ -18,17 +18,15 @@ Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar 
   <tr>
     <td align="center">
       <p>Exemplo 1: Ronaldinho</p>
-      <img src="assets/video_ronaldinho.gif" alt="Vídeo gerado com nossa linguagem - Ronaldinho" width="350"/>
+      <img src="assets/video_ronaldinho.gif" alt="Vídeo gerado com nossa linguagem - Ronaldinho" width="220"/>
     </td>
     <td align="center">
       <p>Exemplo 2: Gatos</p>
-      <img src="assets/video_gatos.gif" alt="Vídeo gerado com nossa linguagem - Gatos" width="350"/>
+      <img src="assets/video_gatos.gif" alt="Vídeo gerado com nossa linguagem - Gatos" width="220"/>
     </td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">
+    <td align="center">
       <p>Exemplo 3: Professores</p>
-      <img src="assets/video_profs.gif" alt="Vídeo gerado com nossa linguagem - Professores" width="350"/>
+      <img src="assets/video_profs.gif" alt="Vídeo gerado com nossa linguagem - Professores" width="220"/>
     </td>
   </tr>
 </table>
