@@ -12,10 +12,26 @@ Integrantes:
 Neste trabalho foi desenvolvido um compilador para uma linguagem capaz de gerar vídeos customizáveis através da junção de Imagens, Áudios, Legendas e Efeitos de transição e edição.
 
 
-(GIF de exemplo de vídeos gerados com nossa linguagem:) 
+(Exemplo de vídeo gerado com nossa linguagem) 
 
-(...)
-
+<table>
+  <tr>
+    <td align="center">
+      <p>Exemplo 1: Ronaldinho</p>
+      <img src="assets/video_ronaldinho.gif" alt="Vídeo gerado com nossa linguagem - Ronaldinho" width="350"/>
+    </td>
+    <td align="center">
+      <p>Exemplo 2: Gatos</p>
+      <img src="assets/video_gatos.gif" alt="Vídeo gerado com nossa linguagem - Gatos" width="350"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <p>Exemplo 3: Professores</p>
+      <img src="assets/video_profs.gif" alt="Vídeo gerado com nossa linguagem - Professores" width="350"/>
+    </td>
+  </tr>
+</table>
 
 Para que isso seja possível, nosso compilador conta com um sistema de geração de código Python compatível com a biblioteca MoviePy que é capaz de executar de fato os comandos descritos na nossa linguagem simplificada.
 
