@@ -1,39 +1,60 @@
-carregar imagem ronaldinho1 de "./assets/ronaldinho1.jpg"
-carregar imagem ronaldinho2 de "./assets/ronaldinho2.jpg"
-carregar imagem ronaldinho3 de "./assets/ronaldinho3.jpg"
+carregar imagem ronaldinho1 de "./assets/ronaldinho4.jpg"
+carregar imagem ronaldinho2 de "./assets/ronaldinho5.jpg"
+carregar imagem ronaldinho3 de "./assets/ronaldinho_drible.jpg"
 carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
 
 cena {
-    duracao: 21s
+    duracao: 24s
 
-    criar texto "TOP 10 FOTOS DO BRUXO!!!!" {
+    criar texto "MELHORES\n FOTOS \nDO BRUXO!!!!\n" {
         fonte: './assets/ARIAL.TTF'
-        tamanho_fonte: 72
-        cor: 'branco'
+        tamanho_fonte: 100
+        cor: 'vermelho'
         posicao: 'centro'
-        inicio em 0s por 5s
+        inicio em 0s por 6s
     }
 
     usar imagem ronaldinho1 {
         posicao: 'centro'
-        inicio em 5s por 5s
+        inicio em 6s por 6s
         efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Ronaldinho\n no\n Barça!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'branco'
+        posicao: 'topo'
+        inicio em 6s por 5s
     }
 
     usar imagem ronaldinho2 {
         posicao: 'centro'
-        inicio em 10s por 5s
+        inicio em 12s por 6s
         efeito: 'CrossFadeOut' por 1s
+    }
+    criar texto "Ronaldinho Jovem\n Dribles!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'amarelo'
+        posicao: 'direita'
+        inicio em 12s por 5s
     }
 
     usar imagem ronaldinho3 {
         posicao: 'centro'
-        inicio em 15s por 5s
+        inicio em 18s por 6s
         efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Ronaldão na\n Copa!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'roxo'
+        posicao: 'esquerda'
+        inicio em 18s por 5s
     }
 
     adicionar audio trilha_animada {
-        inicio em 0s por 21s
+        inicio em 0s por 24s
         com volume 80%
     }
 }

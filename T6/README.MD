@@ -126,7 +126,7 @@ carregar audio trilha_animada de "./assets/musica_upbeat.mp3"
 ```
 Obs: Note que você obterá erros semânticos se importar arquivos inexistentes ou de arquivos incompatíveis (imagem deve ser: "jpg", "jpeg", "png", "bmp", "gif". E áudio deve ser: "mp3", "wav", "ogg", "aac", "flac")
 
-2) Definir a senha e o tempo de duração total do vídeo:
+2) Definir a cena e o tempo de duração total do vídeo:
 ```
 cena {
     duracao: 21s

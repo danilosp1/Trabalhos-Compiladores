@@ -18,8 +18,10 @@ public class AnalisadorSemantico extends VideoLangBaseVisitor<Void> {
         "centro", "esquerda", "direita", "topo", "baixo"
     );
     private static final List<String> EFEITOS_VALIDOS = Arrays.asList(
-        "CrossFadeIn", "CrossFadeOut"
+        "CrossFadeIn", "CrossFadeOut", "degrade_entrada", "degrade_saida", "rolagem", "piscada"
     );
+
+    // "CrossFadeIn", "CrossFadeOut"
 
     public static class ErroSemantico {
         public final int linha;

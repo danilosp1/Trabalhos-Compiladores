@@ -1,0 +1,63 @@
+carregar imagem prof1 de "./assets/prof1.jpg"
+carregar imagem prof2 de "./assets/prof2.jpeg"
+carregar imagem prof3 de "./assets/prof3.png"
+
+carregar audio trilha_feliz de "./assets/musica_feliz.mp3"
+
+cena {
+    duracao: 26s
+
+    criar texto "TOP 3\n Professores Mais\n​ CHARMOSOS\n da UFSCar!!\n (˵ •̀ ᴗ - ˵ )\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 130
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 0s por 7s
+    }
+
+    usar imagem prof2 {
+        posicao: 'centro'
+        inicio em 7s por 6s
+        efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "JANDER!!! (..◜ᴗ◝..) ​\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'preto'
+        posicao: 'topo'
+        inicio em 7s por 5s
+    }
+
+    usar imagem prof3 {
+        posicao: 'centro'
+        inicio em 14s por 6s
+        efeito: 'CrossFadeOut' por 1s
+    }
+    criar texto "Fabi!​​\n (˶ˆᗜˆ˵)\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'azul'
+        posicao: 'direita'
+        inicio em 14s por 5s
+    }
+
+    usar imagem prof1 {
+        posicao: 'centro'
+        inicio em 20s por 6s
+        efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Lucredio!!\n <3 <3\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'vermelho'
+        posicao: 'topo'
+        inicio em 20s por 5s
+    }
+
+    adicionar audio trilha_feliz {
+        inicio em 0s por 26s
+        com volume 80%
+    }
+}
+
+renderizar para "video_profs.mp4" com 24fps e resolucao 1080 x 1920

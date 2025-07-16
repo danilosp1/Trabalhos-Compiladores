@@ -1,0 +1,86 @@
+carregar imagem gato1 de "./assets/gato1.jpg"
+carregar imagem gato2 de "./assets/gato2.jpg"
+carregar imagem gato3 de "./assets/gato3.jpeg"
+carregar imagem gato4 de "./assets/gato4.jpeg"
+
+carregar audio trilha_suave de "./assets/musica_suave.mp3"
+
+cena {
+    duracao: 31s
+
+    criar texto "Melhores Raças \nde Gatos para \nCasa Pequena!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 130
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 0s por 5s
+    }
+
+    usar imagem gato1 {
+        posicao: 'centro'
+        inicio em 5s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Gato Persa!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'preto'
+        posicao: 'topo'
+        inicio em 5s por 4s
+    }
+
+    usar imagem gato2 {
+        posicao: 'centro'
+        inicio em 10s por 5s
+        efeito: 'CrossFadeOut' por 1s
+    }
+    criar texto "Gato de \nPelo Curto!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'azul'
+        posicao: 'direita'
+        inicio em 10s por 4s
+    }
+
+    usar imagem gato3 {
+        posicao: 'centro'
+        inicio em 15s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Gato Exotico!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'amarelo'
+        posicao: 'esquerda'
+        inicio em 15s por 4s
+    }
+
+
+    usar imagem gato4 {
+        posicao: 'centro'
+        inicio em 20s por 5s
+        efeito: 'CrossFadeIn' por 1s
+    }
+    criar texto "Gato da\n Escócia!\n" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 114
+        cor: 'marrom'
+        posicao: 'baixo'
+        inicio em 20s por 4s
+    }
+
+    criar texto "Excelentes Opções!\n Inscreva-se \nPara Mais \nDicas!!" {
+        fonte: './assets/ARIAL.TTF'
+        tamanho_fonte: 130
+        cor: 'branco'
+        posicao: 'centro'
+        inicio em 25s por 5s
+    }
+
+    adicionar audio trilha_suave {
+        inicio em 0s por 30s
+        com volume 80%
+    }
+}
+
+renderizar para "video_gatos.mp4" com 24fps e resolucao 1080 x 1920
