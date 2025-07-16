@@ -69,7 +69,7 @@ cena {
         inicio em 20s por 4s
     }
 
-    criar texto "Excelentes Opções!\n Inscreva-se \nPara Mais \nDicas!!" {
+    criar texto "Excelentes\n Opções! \nInscreva-se\n Para Mais\n Dicas!\n" {
         fonte: './assets/ARIAL.TTF'
         tamanho_fonte: 130
         cor: 'branco'

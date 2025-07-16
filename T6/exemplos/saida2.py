@@ -42,7 +42,7 @@ txt_clip4 = TextClip(
 ).with_start(20).with_duration(4).with_position('bottom')
 
 txt_clip5 = TextClip(
-    text="Excelentes Opções!\n Inscreva-se \nPara Mais \nDicas!!",
+    text="Excelentes\n Opções! \nInscreva-se\n Para Mais\n Dicas!\n",
     font="./assets/ARIAL.TTF",
     font_size=130,
     color='white'
@@ -76,7 +76,7 @@ clip3 = clip3.with_effects([vfx.CrossFadeIn(1)])
 video = CompositeVideoClip([clip0, clip1, clip2, clip3], size=(1080, 1920))
 
 audio = AudioFileClip(trilha_suave_path)
-audio = audio.subclipped(0, 26)
+audio = audio.subclipped(0, 30)
 audio = audio.with_volume_scaled(0,80)
 video = video.with_audio(audio)
 

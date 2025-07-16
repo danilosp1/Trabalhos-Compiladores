@@ -44,7 +44,7 @@ cena {
     usar imagem prof1 {
         posicao: 'centro'
         inicio em 20s por 6s
-        efeito: 'CrossFadeIn' por 1s
+        efeito: 'rolagem' por 1s
     }
     criar texto "Lucredio!!\n <3 <3\n" {
         fonte: './assets/ARIAL.TTF'

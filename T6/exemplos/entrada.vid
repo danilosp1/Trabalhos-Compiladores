@@ -17,7 +17,7 @@ cena {
     usar imagem ronaldinho1 {
         posicao: 'centro'
         inicio em 6s por 6s
-        efeito: 'CrossFadeIn' por 1s
+        efeito: 'piscada' por 1s
     }
     criar texto "Ronaldinho\n no\n Barça!\n" {
         fonte: './assets/ARIAL.TTF'
@@ -43,7 +43,7 @@ cena {
     usar imagem ronaldinho3 {
         posicao: 'centro'
         inicio em 18s por 6s
-        efeito: 'CrossFadeIn' por 1s
+        efeito: 'rolagem' por 1s
     }
     criar texto "Ronaldão na\n Copa!\n" {
         fonte: './assets/ARIAL.TTF'

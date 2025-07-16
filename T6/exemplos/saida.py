@@ -37,19 +37,20 @@ clip0 = ImageClip(ronaldinho1_path)
 clip0 = clip0.with_position('center')
 clip0 = clip0.resized(width=1080, height=1920)
 clip0 = clip0.with_start(6).with_duration(6)
-clip0 = clip0.with_effects([vfx.Blink(duration_on=2.5, duration_off=0.2)])
+clip0 = clip0.with_effects([vfx.Blink(duration_on=2.2, duration_off=0.2)])
 
 clip1 = ImageClip(ronaldinho2_path)
 clip1 = clip1.with_position('center')
 clip1 = clip1.resized(width=1080, height=1920)
 clip1 = clip1.with_start(12).with_duration(6)
-clip1 = clip1.with_effects([vfx.Crop(x1=2, width=2)])
+clip1 = clip1.with_effects([vfx.CrossFadeOut(1)])
 
 clip2 = ImageClip(ronaldinho3_path)
 clip2 = clip2.with_position('center')
 clip2 = clip2.resized(width=1080, height=1920)
 clip2 = clip2.with_start(18).with_duration(6)
 clip2 = clip2.with_effects([vfx.Scroll(w=1000, x_speed=200)])
+
 
 video = CompositeVideoClip([clip0, clip1, clip2], size=(1080, 1920))
 

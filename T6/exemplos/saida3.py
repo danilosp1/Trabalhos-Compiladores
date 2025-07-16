@@ -49,7 +49,7 @@ clip2 = ImageClip(prof1_path)
 clip2 = clip2.with_position('center')
 clip2 = clip2.resized(width=1080, height=1920)
 clip2 = clip2.with_start(20).with_duration(6)
-clip2 = clip2.with_effects([vfx.CrossFadeIn(1)])
+clip2 = clip2.with_effects([vfx.Scroll(w=1000, x_speed=200)])
 
 
 video = CompositeVideoClip([clip0, clip1, clip2], size=(1080, 1920))

@@ -142,7 +142,16 @@ public class GeradorDeCodigo extends VideoLangBaseVisitor<Void> {
             } else if (key.equals("efeito")) {
                 String nomeEfeito = unquote(attr.efeito().STRING().getText());
                 int tempoEfeito = Integer.parseInt(attr.efeito().INT().getText());
-                efeitos.add(String.format("vfx.%s(%d)", nomeEfeito, tempoEfeito));
+
+                if (nomeEfeito.equalsIgnoreCase("rolagem")) {
+                    efeitos.add(String.format(
+                        "vfx.Scroll(w=1000, x_speed=200)"));
+                } else if (nomeEfeito.equalsIgnoreCase("piscada")) {
+                    efeitos.add(String.format(
+                        "vfx.Blink(duration_on=2.2, duration_off=0.2)"));
+                } else {
+                    efeitos.add(String.format("vfx.%s(%d)", nomeEfeito, tempoEfeito));
+                }
             }
         }
         
